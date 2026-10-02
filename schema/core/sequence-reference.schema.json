@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/sequence-reference/0.3.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/sequence-reference/0.4.0/schema.json",
   "title": "SequenceReference",
   "description": "A pointer to a Sequence by identifier, without embedding the sequence itself. Not yet consumed by another betula schema (every current producer embeds full Sequence objects, e.g. in alignment); this exists as the reusable primitive for when a by-reference link is needed, e.g. a hit record pointing at a locally-known query sequence instead of repeating it.",
   "type": "object",
   "properties": {
-    "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.3.0/schema.json" }
+    "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" }
   },
   "required": ["identifier"],
   "additionalProperties": false

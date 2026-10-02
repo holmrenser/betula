@@ -86,6 +86,8 @@ def describe_type(node: dict, current_name: str, linker: Linker) -> str:
             constraints.append(f"minLength {node['minLength']}")
         if "minItems" in node:
             constraints.append(f"minItems {node['minItems']}")
+        if "pattern" in node:
+            constraints.append(f"pattern <code>{esc(node['pattern'])}</code>")
         suffix = f" ({', '.join(constraints)})" if constraints else ""
         return f"<code>{esc(t)}</code>{suffix}"
     return "any"

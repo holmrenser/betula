@@ -1,11 +1,11 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/location/0.3.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/location/0.4.0/schema.json",
   "title": "Location",
   "description": "A 1-based inclusive interval on a named reference sequence (GFF3 convention). Not yet consumed by another betula schema: annotation keeps seqid/start/end/strand flat to match picea's and react-bio-viz's current wire shape rather than nesting them under this. This exists as the reusable primitive for when a genomic-interval-only shape is needed, e.g. a future schema for react-bio-viz's GenomeBrowser feature tracks.",
   "type": "object",
   "properties": {
-    "seqid": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.3.0/schema.json" },
+    "seqid": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
     "start": { "type": "integer", "minimum": 1 },
     "end": { "type": "integer", "minimum": 1 },
     "strand": { "type": "string", "enum": ["+", "-", "."] }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/distance-matrix/0.3.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/distance-matrix/0.4.0/schema.json",
   "title": "DistanceMatrix",
   "description": "A pairwise distance matrix, shared by react-bio-viz and acacia (via @holmrenser/nj's DistanceResult). Squareness, symmetry, and a zero diagonal are semantic constraints, not checked structurally by this schema.",
   "type": "object",
@@ -11,7 +11,7 @@
     },
     "labels": {
       "type": "array",
-      "items": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.3.0/schema.json" },
+      "items": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
       "minItems": 1
     },
     "matrix": {

@@ -3,6 +3,27 @@
 All schemas in this repository version together (see "Versioning policy"
 below); this changelog tracks the schema set as a whole.
 
+## 0.4.0
+
+- Added `schema/core/dna-alphabet`, `core/rna-alphabet`, `core/protein-alphabet`:
+  IUPAC-code `pattern` constraints (ambiguity codes included — R/Y/S/W/K/M/
+  B/D/H/V/N for nucleotides; B/Z/X/J/U/O plus the standard 20 for protein,
+  which together cover all 26 letters). Each also allows `-`/`.` as
+  alignment gap/missing-data characters, since `Sequence` doubles as an
+  alignment row (see `alignment`'s `oneOf`).
+- `sequence`'s `DnaSequence`/`RnaSequence`/`ProteinSequence` variants now
+  `$ref` the matching alphabet instead of an unconstrained string, e.g. a
+  `dna-sequence` containing `U` (RNA-only) or digits now fails validation.
+  `UntypedSequence` is deliberately left unconstrained — its whole point is
+  that the alphabet isn't known.
+- This is the first schema-set change that's stricter in a way that could
+  reject previously-valid data for the (currently nonexistent) adopters of
+  the optional typed-sequence variants — flagged here per the "breaking
+  change" definition below, even though nothing in picea/react-bio-viz/
+  acacia emits typed sequences yet.
+- Bumped every schema's `$id` version segment from `0.3.0` to `0.4.0` in
+  lockstep (see policy below).
+
 ## 0.3.0
 
 - Added the optional wire-format `type` discriminator to `annotation`
@@ -46,7 +67,7 @@ Conformance fixtures (`examples/`) and reference validators
 ## Versioning policy
 
 - Each schema's `$id` embeds its own semver, e.g.
-  `https://schemas.wur.nl/betula/sequence/0.3.0/schema.json`. Changing a
+  `https://schemas.wur.nl/betula/sequence/0.4.0/schema.json`. Changing a
   schema's `$id` version is how consumers notice the contract changed; the
   URI is the schema's identity, not its location in this repo.
 - While the project is young, all schemas bump together, so a `$id` version
@@ -54,7 +75,7 @@ Conformance fixtures (`examples/`) and reference validators
   stabilizes, schemas may version independently (e.g. `tree` reaching `1.0`
   while `blast-result` is still `0.x`) — nothing here prevents that split
   later; it's deferred because it isn't needed yet.
-- A git tag (e.g. `v0.3.0`) marks the commit each schema-set version was
+- A git tag (e.g. `v0.4.0`) marks the commit each schema-set version was
   released at. Tags are the source of truth for "what did a given version
   actually contain"; `main` can move ahead of the latest tag.
 - Breaking change = an existing valid document stops validating. Additive

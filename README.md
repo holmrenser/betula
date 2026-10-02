@@ -35,8 +35,12 @@ so those projects can read and write the same JSON regardless of language.
 
 - **`sequence`** — a single sequence record: `{ identifier, sequence }`, or a
   discriminated variant (`DnaSequence` / `RnaSequence` / `ProteinSequence`)
-  when the alphabet is known. Every current producer (picea, react-bio-viz,
-  acacia) omits the discriminator and validates as the plain shape.
+  when the alphabet is known, in which case `sequence` is also validated
+  against the matching IUPAC alphabet (`core/dna-alphabet`,
+  `core/rna-alphabet`, `core/protein-alphabet` — ambiguity codes included,
+  plus `-`/`.` as alignment gap characters). Every current producer (picea,
+  react-bio-viz, acacia) omits the discriminator and validates as the plain
+  unconstrained shape.
 - **`tree`** — a phylogenetic (or other hierarchical) tree node:
   `{ type?, id?, name, length, children }`. `name` carries the raw label as
   produced by the source (a leaf name, or an internal-node label such as a
@@ -71,7 +75,7 @@ Postgres schema, and ontology (OBO) terms from picea.
 ## Versioning
 
 See `CHANGELOG.md`. Short version: every schema's `$id` embeds its own
-semver (e.g. `.../sequence/0.3.0/schema.json`), all schemas currently bump
+semver (e.g. `.../sequence/0.4.0/schema.json`), all schemas currently bump
 together, and a git tag marks the commit each version was released at.
 
 ## Running the conformance tests
