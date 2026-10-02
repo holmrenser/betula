@@ -3,6 +3,32 @@
 All schemas in this repository version together (see "Versioning policy"
 below); this changelog tracks the schema set as a whole.
 
+## 0.5.0
+
+- Added generated language bindings, each with a parser that rejects
+  exactly what the schema rejects and a test suite running every
+  `examples/` fixture:
+  - `bindings/python` — Pydantic v2 models (datamodel-code-generator);
+    `parse`/`parse_json` validate in strict mode, since lax mode coerces
+    `"1"` to `1` and failed the `hsp-string-coordinate` fixture.
+  - `bindings/typescript` — types (json-schema-to-typescript) plus ajv
+    runtime validation; `parse("Tree", data)` is typed as `Tree`.
+  - `bindings/rust` — typify types plus `jsonschema`-crate validation.
+    typify 0.8 ignores `const` and `minItems`, so parsing validates against
+    the canonical schema before deserializing; the typify input rewrites
+    `const: x` to the equivalent `enum: [x]` so untagged unions pick the
+    right variant (an `rna-sequence` of `ACGN` otherwise deserialized as
+    `DnaSequence`), and GFF3 strand maps to a hand-written `Strand` enum.
+- `scripts/bundle_schema.py` inlines every schema into one self-contained
+  document for the generators; `scripts/generate_bindings.sh` regenerates
+  everything, and CI fails if committed bindings are stale.
+- `scripts/check_versions.py` (run in CI) checks that every schema `$id` and
+  package manifest agree on the version.
+- Fixed `annotation.interval_type`'s description, which still claimed to be
+  the wire-format discriminator after 0.3.0 added `type`.
+- Bumped every schema's `$id` version segment from `0.4.0` to `0.5.0` in
+  lockstep (see policy below).
+
 ## 0.4.0
 
 - Added `schema/core/dna-alphabet`, `core/rna-alphabet`, `core/protein-alphabet`:
@@ -67,7 +93,7 @@ Conformance fixtures (`examples/`) and reference validators
 ## Versioning policy
 
 - Each schema's `$id` embeds its own semver, e.g.
-  `https://schemas.wur.nl/betula/sequence/0.4.0/schema.json`. Changing a
+  `https://schemas.wur.nl/betula/sequence/0.5.0/schema.json`. Changing a
   schema's `$id` version is how consumers notice the contract changed; the
   URI is the schema's identity, not its location in this repo.
 - While the project is young, all schemas bump together, so a `$id` version
@@ -75,7 +101,7 @@ Conformance fixtures (`examples/`) and reference validators
   stabilizes, schemas may version independently (e.g. `tree` reaching `1.0`
   while `blast-result` is still `0.x`) — nothing here prevents that split
   later; it's deferred because it isn't needed yet.
-- A git tag (e.g. `v0.4.0`) marks the commit each schema-set version was
+- A git tag (e.g. `v0.5.0`) marks the commit each schema-set version was
   released at. Tags are the source of truth for "what did a given version
   actually contain"; `main` can move ahead of the latest tag.
 - Breaking change = an existing valid document stops validating. Additive

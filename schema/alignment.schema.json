@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/alignment/0.4.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/alignment/0.5.0/schema.json",
   "title": "Alignment",
   "description": "A multiple sequence alignment: a list of Sequence records. Conventionally all sequences have the same length once gaps are included, but that is a semantic constraint, not checked structurally by this schema. Accepts either the bare-array shape every current producer (react-bio-viz's AlignedSequences, acacia's MSAData) actually emits, or a wrapped object carrying the wire-format 'type' discriminator for producers that want one.",
   "oneOf": [
@@ -17,7 +17,7 @@
         },
         "sequences": {
           "type": "array",
-          "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.4.0/schema.json" },
+          "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.5.0/schema.json" },
           "minItems": 1
         }
       },
@@ -27,7 +27,7 @@
     "UnwrappedAlignment": {
       "description": "The shape every current producer (react-bio-viz, acacia) actually emits: no wrapper, no discriminator.",
       "type": "array",
-      "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.4.0/schema.json" },
+      "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.5.0/schema.json" },
       "minItems": 1
     }
   }

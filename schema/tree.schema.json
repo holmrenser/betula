@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/tree/0.4.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/tree/0.5.0/schema.json",
   "title": "Tree",
   "description": "A phylogenetic (or other hierarchical) tree node, shared by picea, react-bio-viz, acacia, and iqtreeserver. The root of a tree is itself a Tree node; a whole tree and a single node use the same shape, so 'type' is optional and conventionally set only on a node transmitted as a standalone document (typically the root), not repeated on every nested child.",
   "type": "object",

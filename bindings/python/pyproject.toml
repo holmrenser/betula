@@ -1,0 +1,14 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "betula"
+version = "0.5.0"
+description = "Pydantic bindings for the betula bioinformatics JSON schemas"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = ["pydantic>=2.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/betula"]

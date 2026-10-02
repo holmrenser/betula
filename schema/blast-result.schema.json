@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/blast-result/0.4.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/blast-result/0.5.0/schema.json",
   "title": "BlastResult",
   "description": "A full BLAST search result, matching blastserver's parsed-XML shape: hit-level, with nested HSPs and taxonomy/cluster enrichment. react-bio-viz's flattened single-row-per-hit visualization shape is a derived view of this, not a separate wire format. Numeric fields here are typed as numbers; blastserver's raw XML parse currently yields numeric strings and must cast before serializing against this schema.",
   "type": "object",
@@ -29,7 +29,7 @@
       "type": "object",
       "description": "One member of a clustered hit (e.g. in a clustered_nr database); a non-clustered hit has exactly one member.",
       "properties": {
-        "accession": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
+        "accession": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
         "title": { "type": "string" },
         "taxid": { "type": "integer" },
         "name": { "type": "string" }
@@ -40,10 +40,10 @@
     "Hit": {
       "type": "object",
       "properties": {
-        "accession": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
+        "accession": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
         "title": { "type": "string" },
         "taxid": { "type": "integer" },
-        "saccver": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
+        "saccver": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
         "name": { "type": "string", "description": "Resolved taxon scientific name." },
         "members": { "type": "array", "items": { "$ref": "#/$defs/HitMember" }, "minItems": 1 },
         "clusterSize": { "type": "integer", "minimum": 1 },
@@ -79,7 +79,7 @@
     "program": { "type": "string" },
     "version": { "type": "string" },
     "db": { "type": "string" },
-    "queryId": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.4.0/schema.json" },
+    "queryId": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
     "queryLen": { "type": "integer", "minimum": 1 },
     "queryTitle": { "type": "string" },
     "hits": { "type": "array", "items": { "$ref": "#/$defs/Hit" } },

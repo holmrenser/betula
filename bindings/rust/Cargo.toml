@@ -1,0 +1,12 @@
+[package]
+name = "betula"
+version = "0.5.0"
+edition = "2021"
+description = "Rust types and validating parsers for the betula bioinformatics JSON schemas"
+license = "MIT"
+
+[dependencies]
+jsonschema = "0.58.4"
+regress = "0.12.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"

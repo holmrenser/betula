@@ -15,7 +15,8 @@ so those projects can read and write the same JSON regardless of language.
 
 - `schema/` — canonical schemas, one file per object (`<name>.schema.json`).
   `schema/core/` holds standalone, individually-`$ref`-able primitives
-  (`Identifier`, `Metadata`, `Location`, `SequenceReference`) rather than
+  (`Identifier`, `Metadata`, `Location`, `SequenceReference`, and the
+  DNA/RNA/protein alphabets) rather than
   letting the same shapes get redefined inline in multiple schemas.
 - `examples/<name>/valid/` and `examples/<name>/invalid/` — fixtures that must
   pass or fail validation against `schema/<name>.schema.json`. These are the
@@ -30,6 +31,67 @@ so those projects can read and write the same JSON regardless of language.
 - `scripts/build_docs.py` — renders `schema/` + `examples/` into the static
   site published at the docs link above (`docs/` itself is a build artifact,
   not committed — see `.gitignore`).
+- `bindings/{python,typescript,rust}/` — generated types plus validating
+  parsers for each language (see below).
+
+## Language bindings
+
+Each binding exposes one type per schema title and a parse function that
+rejects anything the JSON Schema rejects. All three run the full `examples/`
+fixture set in CI.
+
+**Python** (Pydantic v2) — `pip install ./bindings/python`
+
+```python
+import betula
+
+tree = betula.parse_json(betula.Tree, '{"name": "A", "length": 0.1, "children": []}')
+seq = betula.parse(betula.Sequence, {"type": "dna-sequence", "identifier": "s1", "sequence": "ACGT"})
+isinstance(seq.root, betula.DnaSequence)  # True
+```
+
+Use `parse` / `parse_json` rather than `Model.model_validate*`: they run in
+Pydantic's strict mode. Lax mode would coerce e.g. `"1"` into an int where
+the schema requires a JSON integer.
+
+**TypeScript** (types from `json-schema-to-typescript`, validation by ajv)
+
+```ts
+import { parse, parseJson, is, type Tree } from "betula";
+
+const tree: Tree = parseJson("Tree", text);    // throws BetulaValidationError
+if (is("Sequence", data) && "type" in data && data.type === "dna-sequence") {
+  data.sequence; // narrowed to DnaSequence
+}
+```
+
+**Rust** (types from typify, validation by the `jsonschema` crate)
+
+```rust
+let tree: betula::Tree = betula::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#)?;
+```
+
+Use `betula::parse` / `parse_str` rather than `serde_json::from_*`: typify
+doesn't enforce every keyword (e.g. `minItems`), so these validate against
+the canonical schema first, then deserialize. Serializing and re-parsing
+yields an equal value, but empty optional arrays are omitted on output.
+
+R isn't covered: there's no JSON-Schema-to-R code generator comparable to
+the above. From R, read with `jsonlite` and validate with the
+`jsonvalidate` package against the self-contained bundle from
+`python3 scripts/bundle_schema.py` (the individual `schema/` files `$ref`
+each other by URIs that don't resolve over the network).
+
+### Regenerating
+
+`scripts/generate_bindings.sh` regenerates all three from `schema/` (via a
+self-contained bundle, since the schemas' `https://schemas.wur.nl/...`
+`$id`s don't resolve over the network). CI reruns it and fails if the
+committed output differs, so a schema change must ship with regenerated
+bindings. It needs `pip install -r bindings/python/requirements-dev.txt`,
+`npm ci` in `bindings/typescript`, and
+`cargo install cargo-typify --version 0.8.0 --locked`; generator versions
+are pinned so output is reproducible.
 
 ## Current schemas
 
@@ -75,7 +137,7 @@ Postgres schema, and ontology (OBO) terms from picea.
 ## Versioning
 
 See `CHANGELOG.md`. Short version: every schema's `$id` embeds its own
-semver (e.g. `.../sequence/0.4.0/schema.json`), all schemas currently bump
+semver (e.g. `.../sequence/0.5.0/schema.json`), all schemas currently bump
 together, and a git tag marks the commit each version was released at.
 
 ## Running the conformance tests

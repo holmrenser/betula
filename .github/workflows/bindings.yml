@@ -1,0 +1,71 @@
+name: bindings
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  drift:
+    name: generated code is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cargo/bin/cargo-typify
+          key: cargo-typify-0.8.0-${{ runner.os }}
+      - run: pip install -r bindings/python/requirements-dev.txt
+      - run: npm ci
+        working-directory: bindings/typescript
+      - run: command -v cargo-typify || cargo install cargo-typify --version 0.8.0 --locked
+      - run: scripts/generate_bindings.sh
+      - name: fail if regeneration changed anything
+        run: |
+          if [ -n "$(git status --porcelain -- bindings/)" ]; then
+            echo "::error::Bindings are stale. Run scripts/generate_bindings.sh and commit the result."
+            git status --short -- bindings/
+            git diff --stat -- bindings/
+            exit 1
+          fi
+
+  python:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install ./bindings/python
+      - run: python -m unittest discover -s bindings/python/tests
+
+  typescript:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bindings/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm test
+
+  rust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bindings/rust
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo test --locked

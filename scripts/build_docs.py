@@ -242,6 +242,12 @@ INDEX_TEMPLATE = """<!doctype html>
 <ul class="card-list">
 {core_cards}
 </ul>
+<h2>Language bindings</h2>
+<p>Generated types with validating parsers for <strong>Python</strong> (Pydantic),
+<strong>TypeScript</strong> (ajv), and <strong>Rust</strong> (serde + jsonschema) live in
+<a href="https://github.com/holmrenser/betula/tree/main/bindings"><code>bindings/</code></a>.
+Each runs every example on these pages in CI. See the
+<a href="https://github.com/holmrenser/betula#language-bindings">README</a> for usage.</p>
 </main>
 </body>
 </html>
