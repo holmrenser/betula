@@ -1,0 +1,45 @@
+{
+  "program": "blastp",
+  "version": "BLAST 2.16.0+",
+  "db": "nr",
+  "queryId": "Query_1",
+  "queryLen": 120,
+  "queryTitle": "example query protein",
+  "stat": "",
+  "message": "",
+  "hits": [
+    {
+      "accession": "WP_012345678",
+      "title": "hypothetical protein",
+      "taxid": 1280,
+      "saccver": "WP_012345678.1",
+      "name": "Example species",
+      "members": [
+        { "accession": "WP_012345678", "title": "hypothetical protein", "taxid": 1280, "name": "Example species" }
+      ],
+      "clusterSize": 1,
+      "queryCover": 95.5,
+      "percentIdentity": 87.2,
+      "num": 1,
+      "len": 118,
+      "ancestors": [1280],
+      "hsps": [
+        {
+          "num": 1,
+          "bitScore": 210.5,
+          "score": 540,
+          "evalue": 1e-65,
+          "identity": 103,
+          "alignLen": 118,
+          "queryFrom": "1",
+          "queryTo": 118,
+          "hitFrom": 1,
+          "hitTo": 118,
+          "qseq": "MST...",
+          "hseq": "MST...",
+          "midline": "MST..."
+        }
+      ]
+    }
+  ]
+}

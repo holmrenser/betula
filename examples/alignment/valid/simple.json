@@ -1,0 +1,5 @@
+[
+  { "identifier": "seq1", "sequence": "ACGT--ACGT" },
+  { "identifier": "seq2", "sequence": "ACGTACAC--" },
+  { "identifier": "seq3", "sequence": "AC-TAC--GT" }
+]

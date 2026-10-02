@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.wur.nl/betula/tree/0.1.0/schema.json",
+  "title": "Tree",
+  "description": "A phylogenetic (or other hierarchical) tree node, shared by picea, react-bio-viz, acacia, and iqtreeserver. The root of a tree is itself a Tree node; a whole tree and a single node use the same shape.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Optional node identifier. Not every producer assigns one at parse time (acacia/iqtreeserver derive ids separately); consumers must not assume it is present.",
+      "type": ["string", "integer"]
+    },
+    "name": {
+      "description": "Raw node label: a leaf name, or an internal-node label such as a bootstrap value or support string (e.g. picea's \"0.989\", IQ-TREE's \"95.3/88\"). Kept as the original string for round-tripping; parse further only if you know the producer's convention.",
+      "type": "string"
+    },
+    "length": {
+      "description": "Branch length leading to this node.",
+      "type": "number",
+      "minimum": 0
+    },
+    "children": {
+      "description": "Child nodes. Empty array for a leaf.",
+      "type": "array",
+      "items": { "$ref": "#" }
+    }
+  },
+  "required": ["name", "length", "children"],
+  "additionalProperties": false
+}

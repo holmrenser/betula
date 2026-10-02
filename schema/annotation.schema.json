@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.wur.nl/betula/annotation/0.1.0/schema.json",
+  "title": "Annotation",
+  "description": "A GFF3-derived sequence feature (gene model) node. Shared verbatim between picea (SequenceInterval) and react-bio-viz (SequenceInterval).",
+  "type": "object",
+  "properties": {
+    "ID": {
+      "type": "string",
+      "minLength": 1
+    },
+    "seqid": {
+      "type": "string",
+      "minLength": 1,
+      "description": "GFF3 column 1: the reference sequence this feature is on."
+    },
+    "source": {
+      "type": "string",
+      "description": "GFF3 column 2."
+    },
+    "interval_type": {
+      "type": "string",
+      "minLength": 1,
+      "description": "GFF3 column 3 (feature type), e.g. 'gene', 'mRNA', 'exon', 'CDS'."
+    },
+    "start": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "GFF3 column 4: 1-based inclusive start."
+    },
+    "end": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "GFF3 column 5: 1-based inclusive end."
+    },
+    "score": {
+      "description": "GFF3 column 6. '.' is the GFF3 convention for 'no score'.",
+      "oneOf": [{ "type": "number" }, { "const": "." }]
+    },
+    "strand": {
+      "type": "string",
+      "enum": ["+", "-", "."],
+      "description": "GFF3 column 7."
+    },
+    "phase": {
+      "description": "GFF3 column 8 (CDS reading-frame phase). '.' is the GFF3 convention for 'not applicable'.",
+      "oneOf": [{ "enum": [0, 1, 2] }, { "const": "." }]
+    },
+    "attributes": {
+      "type": "object",
+      "description": "GFF3 column 9, keyed by tag name. Values are a single string, or a list for multi-valued tags.",
+      "additionalProperties": {
+        "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }]
+      }
+    },
+    "children": {
+      "type": "array",
+      "items": { "$ref": "#" },
+      "description": "Nested features, e.g. mRNA under gene, exon/CDS under mRNA."
+    }
+  },
+  "required": ["ID", "seqid", "source", "interval_type", "start", "end", "score", "strand", "phase", "attributes", "children"],
+  "additionalProperties": false
+}

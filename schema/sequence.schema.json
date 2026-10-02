@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.wur.nl/betula/sequence/0.1.0/schema.json",
+  "title": "Sequence",
+  "description": "A single biological sequence record, shared by picea, react-bio-viz, and acacia (FASTA-derived).",
+  "type": "object",
+  "properties": {
+    "identifier": {
+      "type": "string",
+      "description": "Sequence label, e.g. a FASTA header (without the leading '>').",
+      "minLength": 1
+    },
+    "sequence": {
+      "type": "string",
+      "description": "Raw sequence characters, in whatever alphabet/case the source used.",
+      "minLength": 1
+    }
+  },
+  "required": ["identifier", "sequence"],
+  "additionalProperties": false
+}

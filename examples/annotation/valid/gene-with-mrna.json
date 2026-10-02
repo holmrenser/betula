@@ -1,0 +1,63 @@
+{
+  "ID": "gene:MtrunA17Chr1g0184451",
+  "seqid": "MtrunA17Chr1",
+  "source": "EuGene",
+  "interval_type": "gene",
+  "start": 35039693,
+  "end": 35045433,
+  "score": ".",
+  "strand": "+",
+  "phase": ".",
+  "attributes": {
+    "name": ["MtrunA17Chr1g0184451"],
+    "locus_tag": ["MtrunA17_Chr1g0184451"]
+  },
+  "children": [
+    {
+      "ID": "mRNA:MtrunA17Chr1g0184451.1",
+      "seqid": "MtrunA17Chr1",
+      "source": "EuGene",
+      "interval_type": "mRNA",
+      "start": 35039693,
+      "end": 35045433,
+      "score": ".",
+      "strand": "+",
+      "phase": ".",
+      "attributes": {
+        "parent": ["gene:MtrunA17Chr1g0184451"]
+      },
+      "children": [
+        {
+          "ID": "exon:MtrunA17Chr1g0184451.1.exon1",
+          "seqid": "MtrunA17Chr1",
+          "source": "EuGene",
+          "interval_type": "exon",
+          "start": 35039693,
+          "end": 35039900,
+          "score": ".",
+          "strand": "+",
+          "phase": ".",
+          "attributes": {
+            "parent": ["mRNA:MtrunA17Chr1g0184451.1"]
+          },
+          "children": []
+        },
+        {
+          "ID": "cds:MtrunA17Chr1g0184451.1.cds1",
+          "seqid": "MtrunA17Chr1",
+          "source": "EuGene",
+          "interval_type": "CDS",
+          "start": 35039693,
+          "end": 35039900,
+          "score": 0.97,
+          "strand": "+",
+          "phase": 0,
+          "attributes": {
+            "parent": ["mRNA:MtrunA17Chr1g0184451.1"]
+          },
+          "children": []
+        }
+      ]
+    }
+  ]
+}

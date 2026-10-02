@@ -1,0 +1,27 @@
+{
+  "name": "root",
+  "length": 0,
+  "children": [
+    {
+      "name": "leaf1",
+      "length": 0.12,
+      "children": []
+    },
+    {
+      "name": "95.3/88",
+      "length": 0.34,
+      "children": [
+        {
+          "name": "leaf2",
+          "length": 0.01,
+          "children": []
+        },
+        {
+          "name": "leaf3",
+          "length": 0.02,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

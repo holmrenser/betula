@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.wur.nl/betula/blast-result/0.1.0/schema.json",
+  "title": "BlastResult",
+  "description": "A full BLAST search result, matching blastserver's parsed-XML shape: hit-level, with nested HSPs and taxonomy/cluster enrichment. react-bio-viz's flattened single-row-per-hit visualization shape is a derived view of this, not a separate wire format. Numeric fields here are typed as numbers; blastserver's raw XML parse currently yields numeric strings and must cast before serializing against this schema.",
+  "type": "object",
+  "$defs": {
+    "Hsp": {
+      "type": "object",
+      "properties": {
+        "num": { "type": "integer", "minimum": 1 },
+        "bitScore": { "type": "number" },
+        "score": { "type": "number" },
+        "evalue": { "type": "number", "minimum": 0 },
+        "identity": { "type": "integer", "minimum": 0 },
+        "alignLen": { "type": "integer", "minimum": 1 },
+        "queryFrom": { "type": "integer", "minimum": 1 },
+        "queryTo": { "type": "integer", "minimum": 1 },
+        "hitFrom": { "type": "integer", "minimum": 1 },
+        "hitTo": { "type": "integer", "minimum": 1 },
+        "qseq": { "type": "string" },
+        "hseq": { "type": "string" },
+        "midline": { "type": "string" }
+      },
+      "required": ["num", "bitScore", "score", "evalue", "identity", "alignLen", "queryFrom", "queryTo", "hitFrom", "hitTo", "qseq", "hseq", "midline"],
+      "additionalProperties": false
+    },
+    "HitMember": {
+      "type": "object",
+      "description": "One member of a clustered hit (e.g. in a clustered_nr database); a non-clustered hit has exactly one member.",
+      "properties": {
+        "accession": { "type": "string" },
+        "title": { "type": "string" },
+        "taxid": { "type": "integer" },
+        "name": { "type": "string" }
+      },
+      "required": ["accession", "title", "taxid", "name"],
+      "additionalProperties": false
+    },
+    "Hit": {
+      "type": "object",
+      "properties": {
+        "accession": { "type": "string" },
+        "title": { "type": "string" },
+        "taxid": { "type": "integer" },
+        "saccver": { "type": "string" },
+        "name": { "type": "string", "description": "Resolved taxon scientific name." },
+        "members": { "type": "array", "items": { "$ref": "#/$defs/HitMember" }, "minItems": 1 },
+        "clusterSize": { "type": "integer", "minimum": 1 },
+        "queryCover": { "type": "number", "minimum": 0, "maximum": 100 },
+        "percentIdentity": { "type": "number", "minimum": 0, "maximum": 100 },
+        "num": { "type": "integer" },
+        "len": { "type": "integer", "minimum": 1 },
+        "hsps": { "type": "array", "items": { "$ref": "#/$defs/Hsp" }, "minItems": 1 },
+        "ancestors": { "type": "array", "items": { "type": "integer" }, "description": "Taxonomy lineage taxids." }
+      },
+      "required": ["accession", "title", "taxid", "saccver", "name", "members", "clusterSize", "queryCover", "percentIdentity", "num", "len", "hsps", "ancestors"],
+      "additionalProperties": false
+    },
+    "TaxonomyNode": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "ancestors": { "type": "array", "items": { "type": "integer" } },
+        "children": { "type": "array", "items": { "$ref": "#/$defs/TaxonomyNode" } },
+        "depth": { "type": "integer", "minimum": 0 },
+        "count": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["id", "name", "ancestors"],
+      "additionalProperties": false
+    }
+  },
+  "properties": {
+    "program": { "type": "string" },
+    "version": { "type": "string" },
+    "db": { "type": "string" },
+    "queryId": { "type": "string" },
+    "queryLen": { "type": "integer", "minimum": 1 },
+    "queryTitle": { "type": "string" },
+    "hits": { "type": "array", "items": { "$ref": "#/$defs/Hit" } },
+    "stat": { "type": "string" },
+    "message": { "type": "string" },
+    "taxonomyTrees": { "type": "array", "items": { "$ref": "#/$defs/TaxonomyNode" } }
+  },
+  "required": ["program", "version", "db", "queryId", "queryLen", "queryTitle", "hits", "stat", "message"],
+  "additionalProperties": false
+}
