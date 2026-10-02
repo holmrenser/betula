@@ -81,3 +81,28 @@ fn discriminator_selects_variant() {
     let untyped: betula::Sequence = betula::parse_str(r#"{"identifier": "s", "sequence": "ACGN"}"#).unwrap();
     assert!(matches!(untyped, betula::Sequence::UntypedSequence(_)), "got {untyped:?}");
 }
+
+/// The docs site's Bindings page embeds examples/usage.rs as the API tour,
+/// so every public, non-hidden item in lib.rs must appear in it.
+#[test]
+fn usage_example_covers_public_api() {
+    let crate_dir = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let lib = fs::read_to_string(crate_dir.join("src/lib.rs")).unwrap();
+    let example = fs::read_to_string(crate_dir.join("examples/usage.rs")).unwrap();
+    let mut previous = "";
+    let mut missing = Vec::new();
+    for line in lib.lines().map(str::trim) {
+        if previous != "#[doc(hidden)]" {
+            for prefix in ["pub fn ", "pub enum ", "pub trait ", "pub const "] {
+                if let Some(rest) = line.strip_prefix(prefix) {
+                    let name: String = rest.chars().take_while(|c| c.is_alphanumeric() || *c == '_').collect();
+                    if !example.contains(&name) {
+                        missing.push(name);
+                    }
+                }
+            }
+        }
+        previous = line;
+    }
+    assert!(missing.is_empty(), "examples/usage.rs doesn't use: {missing:?}");
+}

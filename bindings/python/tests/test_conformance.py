@@ -5,7 +5,9 @@ invalid ones must raise. Classes are looked up on the `betula` package by
 schema title, so a schema that isn't exported fails here.
 """
 
+import doctest
 import json
+import runpy
 import unittest
 from pathlib import Path
 
@@ -60,6 +62,27 @@ class Conformance(unittest.TestCase):
                 parsed = betula.parse_json(getattr(betula, title), path.read_text())
                 dumped = json.loads(parsed.model_dump_json(exclude_unset=True))
                 self.assertEqual(dumped, original)
+
+
+USAGE = Path(__file__).resolve().parents[1] / "examples" / "usage.py"
+
+
+class Documentation(unittest.TestCase):
+    def test_usage_example_runs(self):
+        runpy.run_path(str(USAGE), run_name="__main__")
+
+    def test_usage_example_covers_public_api(self):
+        # The docs site's Bindings page embeds usage.py as the API tour, so
+        # every exported name that isn't a generated model must appear in it.
+        hand_written = [name for name in betula.__all__ if not hasattr(betula.models, name)]
+        self.assertTrue(hand_written)
+        text = USAGE.read_text()
+        self.assertEqual([name for name in hand_written if name not in text], [])
+
+
+def load_tests(loader, tests, ignore):
+    tests.addTests(doctest.DocTestSuite(betula))
+    return tests
 
 
 if __name__ == "__main__":

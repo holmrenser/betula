@@ -45,6 +45,17 @@ pub trait Kind: DeserializeOwned {
     fn validator() -> &'static jsonschema::Validator;
 }
 
+/// Why parsing failed.
+///
+/// ```
+/// match betula::parse_str::<betula::Tree>(r#"{"name": "A", "length": -1, "children": []}"#) {
+///     Err(betula::Error::Invalid { kind, errors }) => {
+///         assert_eq!(kind, "Tree");
+///         assert!(errors[0].starts_with("/length"));
+///     }
+///     other => panic!("expected Error::Invalid, got {other:?}"),
+/// }
+/// ```
 #[derive(Debug)]
 pub enum Error {
     /// The input wasn't JSON, or (a binding bug) schema-valid JSON failed to deserialize.
@@ -78,6 +89,12 @@ impl From<serde_json::Error> for Error {
 }
 
 /// Check `value` against the schema for `T` without deserializing it.
+///
+/// ```
+/// use serde_json::json;
+/// assert!(betula::validate::<betula::Identifier>(&json!("seq1")).is_ok());
+/// assert!(betula::validate::<betula::Identifier>(&json!("")).is_err());
+/// ```
 pub fn validate<T: Kind>(value: &Value) -> Result<(), Error> {
     let errors: Vec<String> = T::validator()
         .iter_errors(value)
@@ -91,12 +108,26 @@ pub fn validate<T: Kind>(value: &Value) -> Result<(), Error> {
 }
 
 /// Validate already-decoded JSON against the schema for `T`, then deserialize it.
+///
+/// ```
+/// use serde_json::json;
+/// let seq: betula::Sequence =
+///     betula::parse(json!({"type": "rna-sequence", "identifier": "s1", "sequence": "ACGN"})).unwrap();
+/// // "ACGN" is valid DNA too; the `type` discriminator decides the variant.
+/// assert!(matches!(seq, betula::Sequence::RnaSequence(_)));
+/// ```
 pub fn parse<T: Kind>(value: Value) -> Result<T, Error> {
     validate::<T>(&value)?;
     Ok(serde_json::from_value(value)?)
 }
 
 /// Parse JSON text into `T`, validating against its schema first.
+///
+/// ```
+/// let tree: betula::Tree = betula::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#).unwrap();
+/// assert_eq!(tree.name, "A");
+/// assert!(betula::parse_str::<betula::Tree>("not json").is_err());
+/// ```
 pub fn parse_str<T: Kind>(text: &str) -> Result<T, Error> {
     parse(serde_json::from_str(text)?)
 }

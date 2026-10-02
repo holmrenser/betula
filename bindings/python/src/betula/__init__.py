@@ -44,12 +44,29 @@ M = TypeVar("M", bound=BaseModel)
 
 
 def parse_json(model: type[M], data: str | bytes) -> M:
-    """Parse JSON text into `model`, raising `ValidationError` if it doesn't conform."""
+    """Parse JSON text into `model`, raising `ValidationError` if it doesn't conform.
+
+    >>> tree = parse_json(Tree, '{"name": "A", "length": 0.1, "children": []}')
+    >>> tree.name
+    'A'
+    >>> parse_json(Tree, '{"name": "A", "length": -1, "children": []}')  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ValidationError: 1 validation error for Tree
+    """
     return model.model_validate_json(data, strict=True)
 
 
 def parse(model: type[M], data: Any) -> M:
-    """Validate already-decoded JSON (dicts/lists/scalars) into `model`."""
+    """Validate already-decoded JSON (dicts/lists/scalars) into `model`.
+
+    Strict, like the schema: a numeric string is not coerced to a number.
+
+    >>> parse(Tree, {"name": "A", "length": 0.1, "children": []}).length
+    0.1
+    >>> parse(Tree, {"name": "A", "length": "0.1", "children": []})  # doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ValidationError: 1 validation error for Tree
+    """
     return model.model_validate(data, strict=True)
 
 

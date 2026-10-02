@@ -36,51 +36,16 @@ so those projects can read and write the same JSON regardless of language.
 
 ## Language bindings
 
-Each binding exposes one type per schema title and a parse function that
-rejects anything the JSON Schema rejects. All three run the full `examples/`
-fixture set in CI.
+Generated types plus validating parsers for Python (Pydantic), TypeScript
+(ajv), and Rust (typify + the `jsonschema` crate) live in `bindings/`. Each
+exposes one type per schema title and a parse function that rejects exactly
+what the schema rejects, and runs every `examples/` fixture in CI.
 
-**Python** (Pydantic v2) — `pip install ./bindings/python`
-
-```python
-import betula
-
-tree = betula.parse_json(betula.Tree, '{"name": "A", "length": 0.1, "children": []}')
-seq = betula.parse(betula.Sequence, {"type": "dna-sequence", "identifier": "s1", "sequence": "ACGT"})
-isinstance(seq.root, betula.DnaSequence)  # True
-```
-
-Use `parse` / `parse_json` rather than `Model.model_validate*`: they run in
-Pydantic's strict mode. Lax mode would coerce e.g. `"1"` into an int where
-the schema requires a JSON integer.
-
-**TypeScript** (types from `json-schema-to-typescript`, validation by ajv)
-
-```ts
-import { parse, parseJson, is, type Tree } from "betula";
-
-const tree: Tree = parseJson("Tree", text);    // throws BetulaValidationError
-if (is("Sequence", data) && "type" in data && data.type === "dna-sequence") {
-  data.sequence; // narrowed to DnaSequence
-}
-```
-
-**Rust** (types from typify, validation by the `jsonschema` crate)
-
-```rust
-let tree: betula::Tree = betula::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#)?;
-```
-
-Use `betula::parse` / `parse_str` rather than `serde_json::from_*`: typify
-doesn't enforce every keyword (e.g. `minItems`), so these validate against
-the canonical schema first, then deserialize. Serializing and re-parsing
-yields an equal value, but empty optional arrays are omitted on output.
-
-R isn't covered: there's no JSON-Schema-to-R code generator comparable to
-the above. From R, read with `jsonlite` and validate with the
-`jsonvalidate` package against the self-contained bundle from
-`python3 scripts/bundle_schema.py` (the individual `schema/` files `$ref`
-each other by URIs that don't resolve over the network).
+Installation, usage, and API notes are on the docs site's
+[Language bindings](https://holmrenser.github.io/betula/bindings.html) page.
+Its code is each binding's `examples/usage.*` file, which CI runs, and
+fails if a public function or type isn't used in it. Python and Rust also
+carry doctests on the parse functions.
 
 ### Regenerating
 

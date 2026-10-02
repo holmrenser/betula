@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "examples",
+    "outDir": "build/examples",
+    "declaration": false,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "examples"
+  ]
+}

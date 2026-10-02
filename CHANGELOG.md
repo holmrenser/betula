@@ -3,6 +3,18 @@
 All schemas in this repository version together (see "Versioning policy"
 below); this changelog tracks the schema set as a whole.
 
+## Unreleased
+
+- Docs site: a [Language bindings](https://holmrenser.github.io/betula/bindings.html)
+  page with install instructions and each binding's `examples/usage.*`
+  embedded verbatim. CI runs those files (their asserts are checked) and
+  fails if any public function or type is missing from them, so the page
+  doubles as the API reference.
+- Doctests on the hand-written parse functions in Python and Rust.
+  TypeScript has no standard doctest runner; its usage example is compiled
+  and run instead.
+- No schema or binding API changes, so no version bump.
+
 ## 0.5.0
 
 - Added generated language bindings, each with a parser that rejects

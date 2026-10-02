@@ -39,6 +39,15 @@ const fixtures = schemaFiles(schemaDir)
 
 test("fixtures exist", () => assert.ok(fixtures.length > 0));
 
+// The docs site's Bindings page embeds examples/usage.ts as the API tour, so
+// every runtime export must appear in it.
+test("usage example covers the public API", async () => {
+  const api = Object.keys(await import("../dist/index.js"));
+  assert.ok(api.length > 0);
+  const usage = readFileSync(join(repo, "bindings", "typescript", "examples", "usage.ts"), "utf8");
+  assert.deepEqual(api.filter((name) => !usage.includes(name)), []);
+});
+
 for (const { title, shouldPass, path } of fixtures) {
   test(relative(repo, path), () => {
     const text = readFileSync(path, "utf8");
