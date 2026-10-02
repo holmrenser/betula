@@ -44,11 +44,14 @@ so those projects can read and write the same JSON regardless of language.
   so it can be round-tripped; `id` is optional since not every producer
   assigns one at parse time.
 - **`annotation`** — a GFF3-derived feature/gene-model node:
-  `{ ID, seqid, source, interval_type, start, end, score, strand, phase,
-  attributes, children }`, nested (gene → mRNA → exon/CDS). Already shared
-  verbatim between picea and react-bio-viz.
-- **`alignment`** — a multiple sequence alignment: an array of `sequence`
-  records (cross-references the `sequence` schema by `$id`).
+  `{ type?, ID, seqid, source, interval_type, start, end, score, strand,
+  phase, attributes, children }`, nested (gene → mRNA → exon/CDS). Already
+  shared verbatim between picea and react-bio-viz (modulo the new optional
+  `type`).
+- **`alignment`** — a multiple sequence alignment: either the bare array of
+  `sequence` records every current producer (react-bio-viz, acacia) emits,
+  or `{ type: "alignment", sequences: [...] }` for producers that want the
+  discriminator.
 - **`distance-matrix`** — a pairwise distance matrix:
   `{ type?, labels, matrix, labelNames? }`.
 - **`blast-result`** — a full BLAST search result matching blastserver's
@@ -59,8 +62,7 @@ so those projects can read and write the same JSON regardless of language.
 
 `type` above is an optional wire-format discriminator distinct from
 `$schema` (which identifies the schema dialect/version, not the object
-kind) — see `CHANGELOG.md` for which schemas have it and why `alignment`
-and `annotation` deliberately don't.
+kind) — see `CHANGELOG.md` for the full rationale per schema.
 
 Not yet modeled: IQ-TREE's `.iqtree` report summary (regex-extracted today,
 no stable field set yet), cluster/`cluster_lca` metadata from blastserver's
@@ -69,7 +71,7 @@ Postgres schema, and ontology (OBO) terms from picea.
 ## Versioning
 
 See `CHANGELOG.md`. Short version: every schema's `$id` embeds its own
-semver (e.g. `.../sequence/0.2.0/schema.json`), all schemas currently bump
+semver (e.g. `.../sequence/0.3.0/schema.json`), all schemas currently bump
 together, and a git tag marks the commit each version was released at.
 
 ## Running the conformance tests

@@ -1,0 +1,6 @@
+{
+  "type": "tree",
+  "sequences": [
+    { "identifier": "seq1", "sequence": "ACGT" }
+  ]
+}

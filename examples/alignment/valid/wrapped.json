@@ -1,0 +1,7 @@
+{
+  "type": "alignment",
+  "sequences": [
+    { "identifier": "seq1", "sequence": "ACGT--ACGT" },
+    { "identifier": "seq2", "sequence": "ACGTACAC--" }
+  ]
+}

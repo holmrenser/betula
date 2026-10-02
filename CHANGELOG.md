@@ -3,6 +3,19 @@
 All schemas in this repository version together (see "Versioning policy"
 below); this changelog tracks the schema set as a whole.
 
+## 0.3.0
+
+- Added the optional wire-format `type` discriminator to `annotation`
+  (`"type": "annotation"`, distinct from `interval_type`'s GFF3 feature
+  kind) and `alignment`.
+- `alignment` is now a discriminated union (`oneOf` over `WrappedAlignment`
+  `{ type: "alignment", sequences: [...] }` and `UnwrappedAlignment`, the
+  bare array every current producer emits), mirroring how `sequence`
+  already handles its own optional discriminator. The bare-array shape
+  remains valid and unchanged.
+- Bumped every schema's `$id` version segment from `0.2.0` to `0.3.0` in
+  lockstep (see policy below).
+
 ## 0.2.0
 
 - Added `schema/core/` — standalone, individually-referenceable primitives:
@@ -33,7 +46,7 @@ Conformance fixtures (`examples/`) and reference validators
 ## Versioning policy
 
 - Each schema's `$id` embeds its own semver, e.g.
-  `https://schemas.wur.nl/betula/sequence/0.2.0/schema.json`. Changing a
+  `https://schemas.wur.nl/betula/sequence/0.3.0/schema.json`. Changing a
   schema's `$id` version is how consumers notice the contract changed; the
   URI is the schema's identity, not its location in this repo.
 - While the project is young, all schemas bump together, so a `$id` version
@@ -41,9 +54,9 @@ Conformance fixtures (`examples/`) and reference validators
   stabilizes, schemas may version independently (e.g. `tree` reaching `1.0`
   while `blast-result` is still `0.x`) — nothing here prevents that split
   later; it's deferred because it isn't needed yet.
-- A git tag (e.g. `v0.2.0`) marks the commit each schema-set version was
-  released at. Tags are the source of truth for "what did `0.2.0` actually
-  contain"; `main` can move ahead of the latest tag.
+- A git tag (e.g. `v0.3.0`) marks the commit each schema-set version was
+  released at. Tags are the source of truth for "what did a given version
+  actually contain"; `main` can move ahead of the latest tag.
 - Breaking change = an existing valid document stops validating. Additive
   change (new optional field, a previously-required field becoming looser)
   does not require a major bump pre-`1.0`.

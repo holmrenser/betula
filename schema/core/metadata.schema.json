@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/metadata/0.2.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/metadata/0.3.0/schema.json",
   "title": "Metadata",
   "description": "Free-form key/value metadata, GFF3-attribute-style: each value is a single string, or a list of strings for multi-valued tags.",
   "type": "object",

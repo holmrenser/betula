@@ -1,13 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/annotation/0.2.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/annotation/0.3.0/schema.json",
   "title": "Annotation",
-  "description": "A GFF3-derived sequence feature (gene model) node. Shared verbatim between picea (SequenceInterval) and react-bio-viz (SequenceInterval). No separate wire-format 'type' discriminator is added here: 'interval_type' (GFF3 column 3, e.g. 'gene'/'mRNA'/'exon'/'CDS') already serves that role, and seqid/start/end/strand stay flat rather than nesting under core/Location, to match the real current wire shape exactly.",
+  "description": "A GFF3-derived sequence feature (gene model) node. Shared verbatim between picea (SequenceInterval) and react-bio-viz (SequenceInterval). seqid/start/end/strand stay flat rather than nesting under core/Location, to match the real current wire shape exactly.",
   "type": "object",
   "properties": {
-    "ID": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.2.0/schema.json" },
+    "type": {
+      "const": "annotation",
+      "description": "Wire-format object-kind discriminator (see betula's versioning policy). Optional. Distinct from 'interval_type': 'type' says this is a betula Annotation object, 'interval_type' says which GFF3 feature kind it is."
+    },
+    "ID": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.3.0/schema.json" },
     "seqid": {
-      "$ref": "https://schemas.wur.nl/betula/core/identifier/0.2.0/schema.json",
+      "$ref": "https://schemas.wur.nl/betula/core/identifier/0.3.0/schema.json",
       "description": "GFF3 column 1: the reference sequence this feature is on."
     },
     "source": {
@@ -42,7 +46,7 @@
       "description": "GFF3 column 8 (CDS reading-frame phase). '.' is the GFF3 convention for 'not applicable'.",
       "oneOf": [{ "enum": [0, 1, 2] }, { "const": "." }]
     },
-    "attributes": { "$ref": "https://schemas.wur.nl/betula/core/metadata/0.2.0/schema.json" },
+    "attributes": { "$ref": "https://schemas.wur.nl/betula/core/metadata/0.3.0/schema.json" },
     "children": {
       "type": "array",
       "items": { "$ref": "#" },
