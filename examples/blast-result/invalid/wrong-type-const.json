@@ -1,0 +1,12 @@
+{
+  "type": "alignment",
+  "program": "blastp",
+  "version": "BLAST 2.16.0+",
+  "db": "nr",
+  "queryId": "Query_1",
+  "queryLen": 120,
+  "queryTitle": "example query protein",
+  "stat": "",
+  "message": "",
+  "hits": []
+}

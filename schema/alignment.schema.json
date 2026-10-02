@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/alignment/0.1.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/alignment/0.2.0/schema.json",
   "title": "Alignment",
-  "description": "A multiple sequence alignment: a list of Sequence records. Conventionally all sequences have the same length once gaps are included, but that is a semantic constraint, not checked structurally by this schema.",
+  "description": "A multiple sequence alignment: a list of Sequence records. Conventionally all sequences have the same length once gaps are included, but that is a semantic constraint, not checked structurally by this schema. Deliberately NOT wrapped in an object with a wire-format 'type' discriminator (unlike tree/distance-matrix/blast-result): react-bio-viz's AlignedSequences and acacia's MSAData are both bare arrays today, and wrapping would break that wire shape for no current consumer.",
   "type": "array",
-  "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.1.0/schema.json" },
+  "items": { "$ref": "https://schemas.wur.nl/betula/sequence/0.2.0/schema.json" },
   "minItems": 1
 }

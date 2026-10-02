@@ -1,4 +1,5 @@
 {
+  "type": "protein-sequence",
   "identifier": "seq2",
   "sequence": "MSTNPKPQRKTKRNTNRRPQDVKFPGGGQIVGGVYLLPRRGPRLGVRATRKTSERSQPR"
 }

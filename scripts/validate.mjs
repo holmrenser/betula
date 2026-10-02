@@ -4,7 +4,7 @@
 // Schemas may $ref each other by $id (e.g. alignment -> sequence), so every
 // schema in schema/ is added to one Ajv instance before any of them is used.
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, basename } from "node:path";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
 
@@ -22,14 +22,23 @@ function listJson(dir) {
   }
 }
 
+function listSchemaFilesRecursive(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory()) out.push(...listSchemaFilesRecursive(full));
+    else if (entry.name.endsWith(".schema.json")) out.push(full);
+  }
+  return out;
+}
+
 const ajv = new Ajv2020({ strict: true, allowUnionTypes: true });
 
-const schemas = readdirSync(schemaDir)
-  .filter((f) => f.endsWith(".schema.json"))
+const schemas = listSchemaFilesRecursive(schemaDir)
   .sort()
   .map((f) => ({
-    name: basename(f, ".schema.json"),
-    schema: JSON.parse(readFileSync(join(schemaDir, f), "utf8")),
+    name: relative(schemaDir, f).replaceAll("\\", "/").replace(/\.schema\.json$/, ""),
+    schema: JSON.parse(readFileSync(f, "utf8")),
   }));
 
 for (const { schema } of schemas) ajv.addSchema(schema, schema.$id);

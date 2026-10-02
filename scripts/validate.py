@@ -19,8 +19,8 @@ EXAMPLES_DIR = ROOT / "examples"
 
 def load_schemas() -> dict[str, dict]:
     return {
-        path.name.removesuffix(".schema.json"): json.loads(path.read_text())
-        for path in sorted(SCHEMA_DIR.glob("*.schema.json"))
+        path.relative_to(SCHEMA_DIR).as_posix().removesuffix(".schema.json"): json.loads(path.read_text())
+        for path in sorted(SCHEMA_DIR.rglob("*.schema.json"))
     }
 
 

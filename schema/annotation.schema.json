@@ -1,17 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/annotation/0.1.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/annotation/0.2.0/schema.json",
   "title": "Annotation",
-  "description": "A GFF3-derived sequence feature (gene model) node. Shared verbatim between picea (SequenceInterval) and react-bio-viz (SequenceInterval).",
+  "description": "A GFF3-derived sequence feature (gene model) node. Shared verbatim between picea (SequenceInterval) and react-bio-viz (SequenceInterval). No separate wire-format 'type' discriminator is added here: 'interval_type' (GFF3 column 3, e.g. 'gene'/'mRNA'/'exon'/'CDS') already serves that role, and seqid/start/end/strand stay flat rather than nesting under core/Location, to match the real current wire shape exactly.",
   "type": "object",
   "properties": {
-    "ID": {
-      "type": "string",
-      "minLength": 1
-    },
+    "ID": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.2.0/schema.json" },
     "seqid": {
-      "type": "string",
-      "minLength": 1,
+      "$ref": "https://schemas.wur.nl/betula/core/identifier/0.2.0/schema.json",
       "description": "GFF3 column 1: the reference sequence this feature is on."
     },
     "source": {
@@ -21,7 +17,7 @@
     "interval_type": {
       "type": "string",
       "minLength": 1,
-      "description": "GFF3 column 3 (feature type), e.g. 'gene', 'mRNA', 'exon', 'CDS'."
+      "description": "GFF3 column 3 (feature type), e.g. 'gene', 'mRNA', 'exon', 'CDS'. Doubles as this schema's wire-format type discriminator."
     },
     "start": {
       "type": "integer",
@@ -46,13 +42,7 @@
       "description": "GFF3 column 8 (CDS reading-frame phase). '.' is the GFF3 convention for 'not applicable'.",
       "oneOf": [{ "enum": [0, 1, 2] }, { "const": "." }]
     },
-    "attributes": {
-      "type": "object",
-      "description": "GFF3 column 9, keyed by tag name. Values are a single string, or a list for multi-valued tags.",
-      "additionalProperties": {
-        "oneOf": [{ "type": "string" }, { "type": "array", "items": { "type": "string" } }]
-      }
-    },
+    "attributes": { "$ref": "https://schemas.wur.nl/betula/core/metadata/0.2.0/schema.json" },
     "children": {
       "type": "array",
       "items": { "$ref": "#" },

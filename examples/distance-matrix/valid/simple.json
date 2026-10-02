@@ -1,4 +1,5 @@
 {
+  "type": "distance-matrix",
   "labels": ["A", "B", "C"],
   "matrix": [
     [0, 0.1, 0.3],
