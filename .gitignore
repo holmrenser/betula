@@ -2,7 +2,9 @@ node_modules/
 __pycache__/
 *.pyc
 .venv/
-docs/
+docs/_build/
+docs/schemas/
+docs/schemas.md
 build/
 bindings/typescript/dist/
 bindings/rust/target/

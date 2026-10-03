@@ -26,6 +26,10 @@ def versions() -> dict[str, str]:
     found["bindings/rust/Cargo.toml"] = tomllib.loads((ROOT / "bindings/rust/Cargo.toml").read_text())["package"][
         "version"
     ]
+    # Hand-written docs pages pin install instructions and examples to a version.
+    for page in sorted((ROOT / "docs").glob("*.md")):
+        for i, version in enumerate(re.findall(r"(?:@v|tag = \"v|/)(\d+\.\d+\.\d+)\b", page.read_text())):
+            found[f"{page.relative_to(ROOT)} (mention {i + 1})"] = version
     return found
 
 

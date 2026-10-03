@@ -28,9 +28,11 @@ so those projects can read and write the same JSON regardless of language.
   reference each other by `$id` (e.g. `alignment` → `sequence`, `annotation`
   → `core/identifier`), so both scripts load the whole `schema/` tree into one
   registry/instance before resolving any `$ref`.
-- `scripts/build_docs.py` — renders `schema/` + `examples/` into the static
-  site published at the docs link above (`docs/` itself is a build artifact,
-  not committed — see `.gitignore`).
+- `docs/` — the [mystmd](https://mystmd.org) site published at the docs
+  link above. `index.md` and `bindings.md` are hand-written;
+  `scripts/generate_schema_pages.py` writes a page per schema into
+  `docs/schemas/` (generated, not committed), pulling fixtures and schema
+  sources in with `literalinclude`.
 - `bindings/{python,typescript,rust}/` — generated types plus validating
   parsers for each language (see below).
 
@@ -122,7 +124,12 @@ Both run in CI on every push/PR (`.github/workflows/validate.yml`).
 ## Building the docs site locally
 
 ```bash
-pip install -r requirements.txt
-python3 scripts/build_docs.py
-# then open docs/index.html
+npm ci
+npm run docs:serve   # live preview at http://localhost:3000
+npm run docs         # static build into docs/_build/html, as CI does
 ```
+
+`npm run docs` (`scripts/build_docs.sh`) fails on any mystmd warning, e.g. a
+broken cross-reference or a missing included file: mystmd 1.11's own
+`--strict` only fails on errors. CI builds the site on every PR and deploys
+it from `main`.

@@ -13,6 +13,14 @@ below); this changelog tracks the schema set as a whole.
 - Doctests on the hand-written parse functions in Python and Rust.
   TypeScript has no standard doctest runner; its usage example is compiled
   and run instead.
+- The docs site is now built with [mystmd](https://mystmd.org) instead of a
+  hand-rolled HTML generator: navigation, search, and dark mode come from its
+  book theme. Schema pages are generated as MyST Markdown, and fixtures,
+  schema sources, and usage examples are all `literalinclude`d, so a
+  renamed or deleted file fails the build. `scripts/build_docs.sh` also fails
+  on any warning (mystmd's `--strict` only fails on errors), and the site is
+  built on every PR. Raw schemas and fixtures are still served at
+  `/schema/...` and `/examples/...`.
 - No schema or binding API changes, so no version bump.
 
 ## 0.5.0

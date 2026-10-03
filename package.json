@@ -5,9 +5,12 @@
   "type": "module",
   "description": "Schemas for common bioinformatics data formats",
   "scripts": {
-    "validate": "node scripts/validate.mjs"
+    "validate": "node scripts/validate.mjs",
+    "docs": "scripts/build_docs.sh",
+    "docs:serve": "python3 scripts/generate_schema_pages.py && cd docs && myst start"
   },
   "devDependencies": {
-    "ajv": "^8.17.1"
+    "ajv": "^8.17.1",
+    "mystmd": "1.11.0"
   }
 }
