@@ -28,14 +28,14 @@ schemas and fixtures are also served from this site, under `schema/` and `exampl
 
 ## Implementations
 
-All three are released as `betula-schema`, versioned in lockstep with the schemas (the first
-release is still to come; see [Getting started](getting-started.md) for installing in the meantime).
+All three are published as `betula-schema`, versioned in lockstep with the schemas. See
+[Getting started](getting-started.md) to install them.
 
-| Language   | Package                         | Source                                                                                     | Built on                                  |
-| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| Python     | `betula-schema` (PyPI)          | [`bindings/python`](https://github.com/holmrenser/betula/tree/main/bindings/python)         | Pydantic v2, via datamodel-code-generator |
-| TypeScript | `betula-schema` (npm)           | [`bindings/typescript`](https://github.com/holmrenser/betula/tree/main/bindings/typescript) | json-schema-to-typescript types, ajv      |
-| Rust       | `betula-schema` (crates.io)     | [`bindings/rust`](https://github.com/holmrenser/betula/tree/main/bindings/rust)             | typify types, the `jsonschema` crate      |
+| Language   | Package                                                                      | Source                                                                                     | Built on                                  |
+| ---------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Python     | [`betula-schema`](https://pypi.org/project/betula-schema/) (PyPI)            | [`bindings/python`](https://github.com/holmrenser/betula/tree/main/bindings/python)         | Pydantic v2, via datamodel-code-generator |
+| TypeScript | [`betula-schema`](https://www.npmjs.com/package/betula-schema) (npm)        | [`bindings/typescript`](https://github.com/holmrenser/betula/tree/main/bindings/typescript) | json-schema-to-typescript types, ajv      |
+| Rust       | [`betula-schema`](https://crates.io/crates/betula-schema) (crates.io)       | [`bindings/rust`](https://github.com/holmrenser/betula/tree/main/bindings/rust)             | typify types, the `jsonschema` crate      |
 
 ## Users
 

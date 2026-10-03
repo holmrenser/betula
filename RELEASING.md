@@ -25,6 +25,10 @@ The release workflow then:
 
 ## One-time setup
 
+This is done: 0.6.0 was the first release, and trusted publishing is configured on all three
+registries. It's kept here for reference, e.g. if the repository or workflow file is renamed, which
+breaks the trust relationship.
+
 The workflow uses trusted publishing: each registry trusts this repository's `release.yml` and
 issues a short-lived token per run, so no registry secrets are stored in GitHub. Each registry
 needs to know: owner `holmrenser`, repository `betula`, workflow `release.yml`, and the environment
@@ -43,5 +47,3 @@ named below. Check each registry's docs for the current steps; the outline:
   PyPI uploads, and the GitHub release is created.
 - The GitHub environments `pypi`, `npm`, and `crates-io` are created on the first run. Adding
   required reviewers to them makes each publish wait for approval.
-
-After the first release, remove the "not published yet" note from `docs/getting-started.md`.

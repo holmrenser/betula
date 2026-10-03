@@ -41,8 +41,11 @@ so those projects can read and write the same JSON regardless of language.
 
 Generated types plus validating parsers for Python (Pydantic), TypeScript
 (ajv), and Rust (typify + the `jsonschema` crate) live in `bindings/`, and
-are released as `betula-schema` on PyPI, npm, and crates.io (see
-[RELEASING.md](RELEASING.md); not yet published). Each
+are published as `betula-schema` on
+[PyPI](https://pypi.org/project/betula-schema/),
+[npm](https://www.npmjs.com/package/betula-schema), and
+[crates.io](https://crates.io/crates/betula-schema) (see
+[RELEASING.md](RELEASING.md) for how releases work). Each
 exposes one type per schema title and a parse function that rejects exactly
 what the schema rejects, and runs every `examples/` fixture in CI.
 

@@ -3,6 +3,15 @@
 All schemas in this repository version together (see "Versioning policy"
 below); this changelog tracks the schema set as a whole.
 
+## Unreleased
+
+- Docs: installation now points at the published packages
+  ([PyPI](https://pypi.org/project/betula-schema/),
+  [npm](https://www.npmjs.com/package/betula-schema),
+  [crates.io](https://crates.io/crates/betula-schema), with Rust API docs on
+  [docs.rs](https://docs.rs/betula-schema)); the "not published yet" note is
+  gone.
+
 ## 0.6.0
 
 The first release on PyPI, npm, and crates.io, as `betula-schema`.
