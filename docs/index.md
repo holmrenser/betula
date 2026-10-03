@@ -22,7 +22,7 @@ derives everything else from it:
 - **Language bindings**: generated types with validating parsers, tested against every fixture.
   See [Getting started](getting-started.md).
 
-Schemas are versioned in their `$id` (e.g. `.../sequence/0.5.0/schema.json`) and released as git
+Schemas are versioned in their `$id` (e.g. `.../sequence/0.6.0/schema.json`) and released as git
 tags; see the [changelog](https://github.com/holmrenser/betula/blob/main/CHANGELOG.md). The raw
 schemas and fixtures are also served from this site, under `schema/` and `examples/`.
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/protein-alphabet/0.5.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/protein-alphabet/0.6.0/schema.json",
   "title": "ProteinAlphabet",
   "description": "IUPAC amino acid codes: the standard 20 (A,C,D,E,F,G,H,I,K,L,M,N,P,Q,R,S,T,V,W,Y) plus the ambiguity/special codes B (Asx), Z (Glx), X (any), J (Leu/Ile), U (selenocysteine), O (pyrrolysine) -- together these cover all 26 letters, so this pattern is effectively any letter. Also allows '*' for a stop codon, and '-'/'.' as alignment gap/missing-data characters, since a Sequence doubles as an alignment row. Case-insensitive.",
   "type": "string",

@@ -110,7 +110,7 @@ Postgres schema, and ontology (OBO) terms from picea.
 ## Versioning
 
 See `CHANGELOG.md`. Short version: every schema's `$id` embeds its own
-semver (e.g. `.../sequence/0.5.0/schema.json`), all schemas currently bump
+semver (`.../sequence/X.Y.Z/schema.json`), all schemas currently bump
 together, and a git tag marks the commit each version was released at.
 
 ## Running the conformance tests

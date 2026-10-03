@@ -1,6 +1,6 @@
 {
   "name": "betula-schema",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "TypeScript types and runtime parsers for the betula bioinformatics JSON schemas",
   "license": "MIT",
   "author": "Rens Holmer",

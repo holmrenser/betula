@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "betula-schema"
-version = "0.5.0"
+version = "0.6.0"
 description = "Pydantic models and strict parsers for the betula bioinformatics JSON schemas"
 readme = "README.md"
 requires-python = ">=3.11"

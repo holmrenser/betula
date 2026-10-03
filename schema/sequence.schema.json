@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/sequence/0.5.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/sequence/0.6.0/schema.json",
   "title": "Sequence",
   "description": "A single biological sequence record, shared by picea, react-bio-viz, and acacia (FASTA-derived). 'type' is an optional alphabet discriminator: every current producer omits it and emits the plain UntypedSequence shape, which remains valid. Set it when the alphabet is known so consumers get both a proper discriminated union and IUPAC alphabet validation on 'sequence' (core/dna-alphabet, core/rna-alphabet, core/protein-alphabet) instead of an unconstrained string.",
   "oneOf": [
@@ -14,8 +14,8 @@
       "type": "object",
       "properties": {
         "type": { "const": "dna-sequence" },
-        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
-        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/dna-alphabet/0.5.0/schema.json" }
+        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.6.0/schema.json" },
+        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/dna-alphabet/0.6.0/schema.json" }
       },
       "required": ["type", "identifier", "sequence"],
       "additionalProperties": false
@@ -24,8 +24,8 @@
       "type": "object",
       "properties": {
         "type": { "const": "rna-sequence" },
-        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
-        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/rna-alphabet/0.5.0/schema.json" }
+        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.6.0/schema.json" },
+        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/rna-alphabet/0.6.0/schema.json" }
       },
       "required": ["type", "identifier", "sequence"],
       "additionalProperties": false
@@ -34,8 +34,8 @@
       "type": "object",
       "properties": {
         "type": { "const": "protein-sequence" },
-        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
-        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/protein-alphabet/0.5.0/schema.json" }
+        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.6.0/schema.json" },
+        "sequence": { "$ref": "https://schemas.wur.nl/betula/core/protein-alphabet/0.6.0/schema.json" }
       },
       "required": ["type", "identifier", "sequence"],
       "additionalProperties": false
@@ -44,7 +44,7 @@
       "type": "object",
       "description": "The shape every current producer (picea, react-bio-viz, acacia) actually emits: no alphabet discriminator.",
       "properties": {
-        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json" },
+        "identifier": { "$ref": "https://schemas.wur.nl/betula/core/identifier/0.6.0/schema.json" },
         "sequence": { "type": "string", "minLength": 1 }
       },
       "required": ["identifier", "sequence"],

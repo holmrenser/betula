@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/identifier/0.5.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/identifier/0.6.0/schema.json",
   "title": "Identifier",
   "description": "A short, stable identifier/label string: a sequence identifier, a GFF3 feature ID, a BLAST accession, etc.",
   "type": "string",

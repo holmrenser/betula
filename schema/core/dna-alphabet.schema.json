@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://schemas.wur.nl/betula/core/dna-alphabet/0.5.0/schema.json",
+  "$id": "https://schemas.wur.nl/betula/core/dna-alphabet/0.6.0/schema.json",
   "title": "DnaAlphabet",
   "description": "IUPAC nucleotide codes for DNA: A/C/G/T plus the standard ambiguity codes (R,Y,S,W,K,M,B,D,H,V,N). Also allows '-' and '.' as alignment gap/missing-data characters, since a Sequence doubles as an alignment row. Case-insensitive (lowercase is the common convention for soft-masked regions in genome assemblies).",
   "type": "string",

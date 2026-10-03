@@ -38,7 +38,7 @@ from betula_schema.models import (
     WrappedAlignment,
 )
 
-__version__ = "0.5.0"
+__version__ = "0.6.0"
 
 M = TypeVar("M", bound=BaseModel)
 
