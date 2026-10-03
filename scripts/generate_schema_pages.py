@@ -132,7 +132,7 @@ def usage(name: str, title: str, page: Path) -> list[str]:
         "## Usage",
         "",
         f"Read a JSON document and parse it as a `{title}`. CI runs this exact code against the first valid "
-        "example below; see [Getting started](#getting-started) to install the bindings.",
+        "example above; see [Getting started](#getting-started) to install the bindings.",
         "",
         "::::{tab-set}",
     ]
@@ -150,7 +150,6 @@ def schema_page(name: str, schema: dict, linker: Linker) -> tuple[Path, str]:
     lines = [f"({schema_label(name)})=", f"# {schema['title']}", "", f"`{schema['$id']}`", ""]
     lines += [md(schema.get("description", "")), ""]
     lines += type_body(schema, name, linker)
-    lines += [""] + usage(name, schema["title"], page)
 
     defs = schema.get("$defs", {})
     if defs:
@@ -170,6 +169,7 @@ def schema_page(name: str, schema: dict, linker: Linker) -> tuple[Path, str]:
 
     source = SCHEMA_DIR / f"{name}.schema.json"
     lines += ["", ":::{dropdown} Schema source"] + include(source, page) + [":::", ""]
+    lines += usage(name, schema["title"], page) + [""]
     return page, "\n".join(lines)
 
 

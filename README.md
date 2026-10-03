@@ -29,7 +29,8 @@ so those projects can read and write the same JSON regardless of language.
   → `core/identifier`), so both scripts load the whole `schema/` tree into one
   registry/instance before resolving any `$ref`.
 - `docs/` — the [mystmd](https://mystmd.org) site published at the docs
-  link above. `index.md` (overview and Getting started) is hand-written;
+  link above. `index.md` (overview, rationale, implementations, users) and
+  `getting-started.md` are hand-written;
   `scripts/generate_schema_pages.py` writes a page per schema into
   `docs/schemas/` (generated, not committed), pulling fixtures, schema
   sources, and per-language usage snippets in with `literalinclude`.
