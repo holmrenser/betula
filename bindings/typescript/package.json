@@ -1,8 +1,24 @@
 {
-  "name": "betula",
+  "name": "betula-schema",
   "version": "0.5.0",
   "description": "TypeScript types and runtime parsers for the betula bioinformatics JSON schemas",
   "license": "MIT",
+  "author": "Rens Holmer",
+  "keywords": [
+    "bioinformatics",
+    "json-schema",
+    "phylogenetics",
+    "sequence-alignment",
+    "gff3",
+    "blast"
+  ],
+  "homepage": "https://holmrenser.github.io/betula/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holmrenser/betula.git",
+    "directory": "bindings/typescript"
+  },
+  "bugs": "https://github.com/holmrenser/betula/issues",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +35,8 @@
     "generate": "node scripts/generate.mjs",
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && tsc -p tsconfig.test.json && tsc -p tsconfig.examples.json && node --test \"test/*.test.mjs\" && node build/examples/usage.js",
-    "example": "tsc -p tsconfig.examples.json && node build/examples/usage.js"
+    "example": "tsc -p tsconfig.examples.json && node build/examples/usage.js",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "ajv": "^8.20.0"
@@ -28,5 +45,9 @@
     "@types/node": "^22.20.5",
     "json-schema-to-typescript": "16.0.0",
     "typescript": "^7.0.2"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }

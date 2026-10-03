@@ -6,14 +6,14 @@
 //! only then deserialize. Use them rather than `serde_json::from_*` directly.
 //!
 //! ```
-//! let tree: betula::Tree =
-//!     betula::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#).unwrap();
+//! let tree: betula_schema::Tree =
+//!     betula_schema::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#).unwrap();
 //! assert_eq!(tree.name, "A");
 //!
-//! assert!(betula::parse_str::<betula::Tree>(r#"{"name": "A", "length": -1, "children": []}"#).is_err());
+//! assert!(betula_schema::parse_str::<betula_schema::Tree>(r#"{"name": "A", "length": -1, "children": []}"#).is_err());
 //! ```
 
-extern crate self as betula;
+extern crate self as betula_schema;
 
 use std::fmt;
 
@@ -25,7 +25,7 @@ pub mod types;
 const BUNDLE: &str = include_str!("../schema/betula.bundle.schema.json");
 
 /// GFF3 strand (column 7). Hand-written because typify can't derive variant
-/// names from `+`/`-`/`.`; generated types refer to it as `betula::Strand`.
+/// names from `+`/`-`/`.`; generated types refer to it as `betula_schema::Strand`.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub enum Strand {
     #[serde(rename = "+")]
@@ -48,8 +48,8 @@ pub trait Kind: DeserializeOwned {
 /// Why parsing failed.
 ///
 /// ```
-/// match betula::parse_str::<betula::Tree>(r#"{"name": "A", "length": -1, "children": []}"#) {
-///     Err(betula::Error::Invalid { kind, errors }) => {
+/// match betula_schema::parse_str::<betula_schema::Tree>(r#"{"name": "A", "length": -1, "children": []}"#) {
+///     Err(betula_schema::Error::Invalid { kind, errors }) => {
 ///         assert_eq!(kind, "Tree");
 ///         assert!(errors[0].starts_with("/length"));
 ///     }
@@ -92,8 +92,8 @@ impl From<serde_json::Error> for Error {
 ///
 /// ```
 /// use serde_json::json;
-/// assert!(betula::validate::<betula::Identifier>(&json!("seq1")).is_ok());
-/// assert!(betula::validate::<betula::Identifier>(&json!("")).is_err());
+/// assert!(betula_schema::validate::<betula_schema::Identifier>(&json!("seq1")).is_ok());
+/// assert!(betula_schema::validate::<betula_schema::Identifier>(&json!("")).is_err());
 /// ```
 pub fn validate<T: Kind>(value: &Value) -> Result<(), Error> {
     let errors: Vec<String> = T::validator()
@@ -111,10 +111,10 @@ pub fn validate<T: Kind>(value: &Value) -> Result<(), Error> {
 ///
 /// ```
 /// use serde_json::json;
-/// let seq: betula::Sequence =
-///     betula::parse(json!({"type": "rna-sequence", "identifier": "s1", "sequence": "ACGN"})).unwrap();
+/// let seq: betula_schema::Sequence =
+///     betula_schema::parse(json!({"type": "rna-sequence", "identifier": "s1", "sequence": "ACGN"})).unwrap();
 /// // "ACGN" is valid DNA too; the `type` discriminator decides the variant.
-/// assert!(matches!(seq, betula::Sequence::RnaSequence(_)));
+/// assert!(matches!(seq, betula_schema::Sequence::RnaSequence(_)));
 /// ```
 pub fn parse<T: Kind>(value: Value) -> Result<T, Error> {
     validate::<T>(&value)?;
@@ -124,9 +124,9 @@ pub fn parse<T: Kind>(value: Value) -> Result<T, Error> {
 /// Parse JSON text into `T`, validating against its schema first.
 ///
 /// ```
-/// let tree: betula::Tree = betula::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#).unwrap();
+/// let tree: betula_schema::Tree = betula_schema::parse_str(r#"{"name": "A", "length": 0.1, "children": []}"#).unwrap();
 /// assert_eq!(tree.name, "A");
-/// assert!(betula::parse_str::<betula::Tree>("not json").is_err());
+/// assert!(betula_schema::parse_str::<betula_schema::Tree>("not json").is_err());
 /// ```
 pub fn parse_str<T: Kind>(text: &str) -> Result<T, Error> {
     parse(serde_json::from_str(text)?)

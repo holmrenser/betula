@@ -1,6 +1,6 @@
 """Pydantic bindings for the betula schemas.
 
-`betula.models` is generated from the JSON Schemas; don't edit it by hand.
+`betula_schema.models` is generated from the JSON Schemas; don't edit it by hand.
 
 Parse with `parse_json` / `parse` rather than calling `model_validate*`
 directly: they validate in Pydantic's strict mode, which is what makes these
@@ -12,7 +12,7 @@ from typing import Any, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from betula.models import (
+from betula_schema.models import (
     Alignment,
     Annotation,
     BlastResult,

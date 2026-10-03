@@ -44,7 +44,7 @@ pub struct Annotation {
     #[doc = "GFF3 column 4: 1-based inclusive start."]
     pub start: ::std::num::NonZeroU64,
     #[doc = "GFF3 column 7."]
-    pub strand: ::betula::Strand,
+    pub strand: ::betula_schema::Strand,
     #[doc = "Wire-format object-kind discriminator (see betula's versioning policy). Optional. Distinct from 'interval_type': 'type' says this is a betula Annotation object, 'interval_type' says which GFF3 feature kind it is."]
     #[serde(
         rename = "type",
@@ -734,7 +734,7 @@ pub struct Location {
     pub end: ::std::num::NonZeroU64,
     pub seqid: Identifier,
     pub start: ::std::num::NonZeroU64,
-    pub strand: ::betula::Strand,
+    pub strand: ::betula_schema::Strand,
 }
 #[doc = "Free-form key/value metadata, GFF3-attribute-style: each value is a single string, or a list of strings for multi-valued tags."]
 #[derive(:: serde :: Deserialize, :: serde :: Serialize, Clone, Debug, PartialEq)]

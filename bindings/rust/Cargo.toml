@@ -1,9 +1,19 @@
 [package]
-name = "betula"
+name = "betula-schema"
 version = "0.5.0"
 edition = "2021"
 description = "Rust types and validating parsers for the betula bioinformatics JSON schemas"
 license = "MIT"
+authors = ["Rens Holmer"]
+repository = "https://github.com/holmrenser/betula"
+homepage = "https://holmrenser.github.io/betula/"
+documentation = "https://docs.rs/betula-schema"
+readme = "README.md"
+keywords = ["bioinformatics", "json-schema", "phylogenetics", "gff3", "blast"]
+categories = ["science", "parser-implementations"]
+# tests/ and the generator scripts need the rest of the repository (fixtures,
+# schemas) and only run in CI; schema/ holds the bundle embedded by src/lib.rs.
+include = ["/src", "/schema", "/examples/usage.rs", "/README.md", "/LICENSE"]
 
 [dependencies]
 jsonschema = "0.58.4"

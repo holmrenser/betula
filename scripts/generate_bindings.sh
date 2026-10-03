@@ -20,7 +20,7 @@ python3 scripts/bundle_schema.py "$BUNDLE"
 
 datamodel-codegen \
   --input "$BUNDLE" --input-file-type jsonschema \
-  --output bindings/python/src/betula/models.py \
+  --output bindings/python/src/betula_schema/models.py \
   --output-model-type pydantic_v2.BaseModel --target-python-version 3.11 \
   --use-title-as-name --use-schema-description --field-constraints \
   --use-standard-collections --use-union-operator --enum-field-as-literal all \
@@ -31,7 +31,7 @@ datamodel-codegen \
 cp "$BUNDLE" bindings/rust/schema/betula.bundle.schema.json
 python3 bindings/rust/scripts/prepare_typify_input.py "$BUNDLE" build/betula.typify.schema.json bindings/rust/src/kinds.rs
 CRATE_VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' bindings/rust/Cargo.toml | head -1)"
-(cd bindings/rust && cargo typify --no-builder --crate "betula@$CRATE_VERSION" -d PartialEq \
+(cd bindings/rust && cargo typify --no-builder --crate "betula-schema@$CRATE_VERSION" -d PartialEq \
   ../../build/betula.typify.schema.json -o src/types.rs)
 
 python3 scripts/render_snippets.py

@@ -3,12 +3,28 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "betula"
+name = "betula-schema"
 version = "0.5.0"
-description = "Pydantic bindings for the betula bioinformatics JSON schemas"
+description = "Pydantic models and strict parsers for the betula bioinformatics JSON schemas"
+readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
+authors = [{ name = "Rens Holmer" }]
+keywords = ["bioinformatics", "json-schema", "pydantic", "phylogenetics", "sequence-alignment", "gff3", "blast"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Typing :: Typed",
+]
 dependencies = ["pydantic>=2.6"]
 
+[project.urls]
+Homepage = "https://holmrenser.github.io/betula/"
+Documentation = "https://holmrenser.github.io/betula/getting-started/"
+Repository = "https://github.com/holmrenser/betula"
+Changelog = "https://github.com/holmrenser/betula/blob/main/CHANGELOG.md"
+
 [tool.hatch.build.targets.wheel]
-packages = ["src/betula"]
+packages = ["src/betula_schema"]

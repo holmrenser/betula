@@ -5,6 +5,16 @@ below); this changelog tracks the schema set as a whole.
 
 ## Unreleased
 
+- **Breaking for binding users:** the bindings are renamed to `betula-schema`
+  on every registry (`betula` is taken on PyPI, npm, and crates.io). Python
+  imports `betula_schema` (the PyPI `betula` package also installs a
+  top-level `betula` module, so keeping that import name would clash), npm
+  imports from `"betula-schema"`, and Rust uses `betula_schema::`.
+- Release automation: pushing a `vX.Y.Z` tag publishes all three packages
+  via trusted publishing and creates the GitHub release
+  (`.github/workflows/release.yml`; see `RELEASING.md`).
+  `scripts/bump_version.py` sets every version at once, and CI now checks on
+  every PR that each package builds and passes its registry's checks.
 - Docs site: a short home page (what betula is, why, implementations, and
   the projects it's derived from), a Getting started page (install, parsing
   a first document, and each binding's `examples/usage.*` as an API tour),
@@ -26,7 +36,6 @@ below); this changelog tracks the schema set as a whole.
   on any warning (mystmd's `--strict` only fails on errors), and the site is
   built on every PR. Raw schemas and fixtures are still served at
   `/schema/...` and `/examples/...`.
-- No schema or binding API changes, so no version bump.
 
 ## 0.5.0
 

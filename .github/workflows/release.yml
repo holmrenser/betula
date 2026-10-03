@@ -1,0 +1,126 @@
+name: release
+
+# Push a vX.Y.Z tag to publish betula-schema X.Y.Z to PyPI, npm, and
+# crates.io and create the GitHub release. See RELEASING.md.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: tag, versions, and changelog agree
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/check_versions.py
+      - id: version
+        name: tag matches package.json
+        run: |
+          version="$(python3 -c 'import json; print(json.load(open("package.json"))["version"])')"
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "::error::tag $GITHUB_REF_NAME doesn't match package.json version $version"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: CHANGELOG has a section for this version
+        run: python3 scripts/release_notes.py "${{ steps.version.outputs.version }}" > /dev/null
+
+  test:
+    needs: check
+    uses: ./.github/workflows/bindings.yml
+
+  pypi:
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/betula-schema/${{ needs.check.outputs.version }}/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          pip install build
+          python -m build bindings/python
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: bindings/python/dist
+          skip-existing: true
+
+  npm:
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/betula-schema/v/${{ needs.check.outputs.version }}
+    permissions:
+      id-token: write
+    defaults:
+      run:
+        working-directory: bindings/typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: https://registry.npmjs.org
+      # Trusted publishing (OIDC) needs npm >= 11.5.1; Node 22 ships npm 10.
+      - run: npm install -g npm@11
+      - run: npm ci
+      - name: publish (skipped if this version is already on npm)
+        run: |
+          version="${{ needs.check.outputs.version }}"
+          if npm view "betula-schema@$version" version >/dev/null 2>&1; then
+            echo "betula-schema@$version is already on npm; skipping"
+          else
+            npm publish
+          fi
+
+  crates:
+    needs: [check, test]
+    runs-on: ubuntu-latest
+    environment:
+      name: crates-io
+      url: https://crates.io/crates/betula-schema/${{ needs.check.outputs.version }}
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - id: published
+        name: check whether this version is already on crates.io
+        run: |
+          status="$(curl -s -o /dev/null -w '%{http_code}' -A 'betula-release (github.com/holmrenser/betula)' \
+            "https://crates.io/api/v1/crates/betula-schema/${{ needs.check.outputs.version }}")"
+          echo "exists=$([ "$status" = 200 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+      - if: steps.published.outputs.exists != 'true'
+        uses: rust-lang/crates-io-auth-action@v1
+        id: auth
+      - if: steps.published.outputs.exists != 'true'
+        working-directory: bindings/rust
+        run: cargo publish --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+
+  github-release:
+    needs: [check, pypi, npm, crates]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          python3 scripts/release_notes.py "${{ needs.check.outputs.version }}" > notes.md
+          gh release create "$GITHUB_REF_NAME" --title "betula $GITHUB_REF_NAME" --notes-file notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}

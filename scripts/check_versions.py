@@ -18,8 +18,8 @@ def versions() -> dict[str, str]:
     found["bindings/python/pyproject.toml"] = tomllib.loads(
         (ROOT / "bindings/python/pyproject.toml").read_text()
     )["project"]["version"]
-    init = (ROOT / "bindings/python/src/betula/__init__.py").read_text()
-    found["bindings/python/src/betula/__init__.py"] = re.search(r'__version__ = "([^"]+)"', init).group(1)
+    init = (ROOT / "bindings/python/src/betula_schema/__init__.py").read_text()
+    found["bindings/python/src/betula_schema/__init__.py"] = re.search(r'__version__ = "([^"]+)"', init).group(1)
     found["bindings/typescript/package.json"] = json.loads(
         (ROOT / "bindings/typescript/package.json").read_text()
     )["version"]

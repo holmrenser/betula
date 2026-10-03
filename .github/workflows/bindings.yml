@@ -4,6 +4,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_call:
 
 jobs:
   drift:
@@ -70,3 +71,29 @@ jobs:
       - uses: actions/checkout@v4
       - run: cargo test --locked
       - run: cargo run --locked --example usage
+
+  packaging:
+    name: packages build and pass registry checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Python sdist and wheel
+        run: |
+          pip install build twine
+          python -m build bindings/python
+          twine check --strict bindings/python/dist/*
+      - name: npm package
+        working-directory: bindings/typescript
+        run: |
+          npm ci
+          npm run build
+          npm pack --dry-run
+      - name: crate
+        working-directory: bindings/rust
+        run: cargo publish --dry-run --locked

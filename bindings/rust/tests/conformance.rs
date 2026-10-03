@@ -53,14 +53,14 @@ fn fixtures() {
             for path in json_files(&repo.join("examples").join(name).join(kind)) {
                 count += 1;
                 let original: Value = serde_json::from_str(&fs::read_to_string(&path).unwrap()).unwrap();
-                let result = betula::round_trip_by_name(title, original)
+                let result = betula_schema::round_trip_by_name(title, original)
                     .unwrap_or_else(|| panic!("{title} is not exported as a betula kind"));
                 let label = path.strip_prefix(&repo).unwrap().display();
                 match (should_pass, result) {
                     (true, Ok(true)) => {}
                     (true, Ok(false)) => failures.push(format!("{label}: serialize/re-parse changed the value")),
                     (true, Err(err)) => failures.push(format!("{label}: expected valid, got {err}")),
-                    (false, Err(betula::Error::Invalid { .. })) => {}
+                    (false, Err(betula_schema::Error::Invalid { .. })) => {}
                     (false, other) => failures.push(format!("{label}: expected invalid, got {other:?}")),
                 }
             }
@@ -74,12 +74,12 @@ fn fixtures() {
 /// discriminator can route this to the right variant of the untagged enum.
 #[test]
 fn discriminator_selects_variant() {
-    let rna: betula::Sequence =
-        betula::parse_str(r#"{"type": "rna-sequence", "identifier": "s", "sequence": "ACGN"}"#).unwrap();
-    assert!(matches!(rna, betula::Sequence::RnaSequence(_)), "got {rna:?}");
+    let rna: betula_schema::Sequence =
+        betula_schema::parse_str(r#"{"type": "rna-sequence", "identifier": "s", "sequence": "ACGN"}"#).unwrap();
+    assert!(matches!(rna, betula_schema::Sequence::RnaSequence(_)), "got {rna:?}");
 
-    let untyped: betula::Sequence = betula::parse_str(r#"{"identifier": "s", "sequence": "ACGN"}"#).unwrap();
-    assert!(matches!(untyped, betula::Sequence::UntypedSequence(_)), "got {untyped:?}");
+    let untyped: betula_schema::Sequence = betula_schema::parse_str(r#"{"identifier": "s", "sequence": "ACGN"}"#).unwrap();
+    assert!(matches!(untyped, betula_schema::Sequence::UntypedSequence(_)), "got {untyped:?}");
 }
 
 /// The docs' Getting started section embeds examples/usage.rs as the API tour,

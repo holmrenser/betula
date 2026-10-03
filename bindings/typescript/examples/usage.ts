@@ -1,7 +1,7 @@
 // Parsing betula JSON with the TypeScript bindings. Compiled and run in CI;
 // the asserts are checked.
 import assert from "node:assert/strict";
-import { BetulaValidationError, is, parse, parseJson, type Kind, type Sequence, type Tree } from "betula";
+import { BetulaValidationError, is, parse, parseJson, type Kind, type Sequence, type Tree } from "betula-schema";
 
 // Parse JSON text. The kind name picks both the schema and the return type.
 const tree: Tree = parseJson(

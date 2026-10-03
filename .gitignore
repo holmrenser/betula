@@ -8,3 +8,5 @@ docs/schemas.md
 build/
 bindings/typescript/dist/
 bindings/rust/target/
+bindings/python/dist/
+*.tgz

@@ -1,7 +1,7 @@
 """Run every examples/ fixture through the public betula API.
 
 Valid fixtures must parse (both from JSON text and from decoded dicts);
-invalid ones must raise. Classes are looked up on the `betula` package by
+invalid ones must raise. Classes are looked up on the `betula_schema` package by
 schema title, so a schema that isn't exported fails here.
 """
 
@@ -16,7 +16,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-import betula
+import betula_schema
 
 REPO = Path(__file__).resolve().parents[3]
 SCHEMA_DIR = REPO / "schema"
@@ -36,27 +36,27 @@ class Conformance(unittest.TestCase):
     def test_fixtures(self):
         count = 0
         for title, should_pass, path in fixtures():
-            model = getattr(betula, title)
+            model = getattr(betula_schema, title)
             text = path.read_text()
             for label, run in (
-                ("parse_json", lambda: betula.parse_json(model, text)),
-                ("parse", lambda: betula.parse(model, json.loads(text))),
+                ("parse_json", lambda: betula_schema.parse_json(model, text)),
+                ("parse", lambda: betula_schema.parse(model, json.loads(text))),
             ):
                 with self.subTest(fixture=str(path.relative_to(REPO)), via=label):
                     if should_pass:
                         run()
                     else:
-                        with self.assertRaises(betula.ValidationError):
+                        with self.assertRaises(betula_schema.ValidationError):
                             run()
             count += 1
         self.assertGreater(count, 0)
 
     def test_discriminator_selects_variant(self):
         # "ACGN" is valid in both the DNA and RNA alphabets, so only `type` decides.
-        rna = betula.parse_json(betula.Sequence, '{"type": "rna-sequence", "identifier": "s", "sequence": "ACGN"}')
-        self.assertIsInstance(rna.root, betula.RnaSequence)
-        untyped = betula.parse_json(betula.Sequence, '{"identifier": "s", "sequence": "ACGN"}')
-        self.assertIsInstance(untyped.root, betula.UntypedSequence)
+        rna = betula_schema.parse_json(betula_schema.Sequence, '{"type": "rna-sequence", "identifier": "s", "sequence": "ACGN"}')
+        self.assertIsInstance(rna.root, betula_schema.RnaSequence)
+        untyped = betula_schema.parse_json(betula_schema.Sequence, '{"identifier": "s", "sequence": "ACGN"}')
+        self.assertIsInstance(untyped.root, betula_schema.UntypedSequence)
 
     def test_round_trip(self):
         for title, should_pass, path in fixtures():
@@ -64,7 +64,7 @@ class Conformance(unittest.TestCase):
                 continue
             with self.subTest(fixture=str(path.relative_to(REPO))):
                 original = json.loads(path.read_text())
-                parsed = betula.parse_json(getattr(betula, title), path.read_text())
+                parsed = betula_schema.parse_json(getattr(betula_schema, title), path.read_text())
                 dumped = json.loads(parsed.model_dump_json(exclude_unset=True))
                 self.assertEqual(dumped, original)
 
@@ -103,14 +103,14 @@ class Documentation(unittest.TestCase):
     def test_usage_example_covers_public_api(self):
         # The docs' Getting started section embeds usage.py as the API tour, so
         # every exported name that isn't a generated model must appear in it.
-        hand_written = [name for name in betula.__all__ if not hasattr(betula.models, name)]
+        hand_written = [name for name in betula_schema.__all__ if not hasattr(betula_schema.models, name)]
         self.assertTrue(hand_written)
         text = USAGE.read_text()
         self.assertEqual([name for name in hand_written if name not in text], [])
 
 
 def load_tests(loader, tests, ignore):
-    tests.addTests(doctest.DocTestSuite(betula))
+    tests.addTests(doctest.DocTestSuite(betula_schema))
     return tests
 
 

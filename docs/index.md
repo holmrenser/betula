@@ -28,11 +28,14 @@ schemas and fixtures are also served from this site, under `schema/` and `exampl
 
 ## Implementations
 
-| Language   | Location                                                                                   | Built on                                     |
-| ---------- | ------------------------------------------------------------------------------------------ | -------------------------------------------- |
-| Python     | [`bindings/python`](https://github.com/holmrenser/betula/tree/main/bindings/python)         | Pydantic v2, via datamodel-code-generator    |
-| TypeScript | [`bindings/typescript`](https://github.com/holmrenser/betula/tree/main/bindings/typescript) | json-schema-to-typescript types, ajv         |
-| Rust       | [`bindings/rust`](https://github.com/holmrenser/betula/tree/main/bindings/rust)             | typify types, the `jsonschema` crate         |
+All three are released as `betula-schema`, versioned in lockstep with the schemas (the first
+release is still to come; see [Getting started](getting-started.md) for installing in the meantime).
+
+| Language   | Package                         | Source                                                                                     | Built on                                  |
+| ---------- | ------------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------- |
+| Python     | `betula-schema` (PyPI)          | [`bindings/python`](https://github.com/holmrenser/betula/tree/main/bindings/python)         | Pydantic v2, via datamodel-code-generator |
+| TypeScript | `betula-schema` (npm)           | [`bindings/typescript`](https://github.com/holmrenser/betula/tree/main/bindings/typescript) | json-schema-to-typescript types, ajv      |
+| Rust       | `betula-schema` (crates.io)     | [`bindings/rust`](https://github.com/holmrenser/betula/tree/main/bindings/rust)             | typify types, the `jsonschema` crate      |
 
 ## Users
 

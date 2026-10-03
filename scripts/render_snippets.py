@@ -59,8 +59,8 @@ def variants(schema: dict) -> list[str]:
 
 def python_snippet(title: str, schema: dict) -> str:
     var, file = snake(title), f"{kebab(title)}.json"
-    lines = [f"# {HEADER}", "import betula", "", f'with open("{file}") as f:',
-             f"    {var} = betula.parse_json(betula.{title}, f.read())"]
+    lines = [f"# {HEADER}", f"from betula_schema import {title}, parse_json", "", f'with open("{file}") as f:',
+             f"    {var} = parse_json({title}, f.read())"]
     if shape(schema) == "union":
         names = variants(schema)
         lines.append(f"# {var}.root is the matched variant: {', '.join(names[:-1])}, or {names[-1]}")
@@ -72,7 +72,7 @@ def python_snippet(title: str, schema: dict) -> str:
 def typescript_snippet(title: str, schema: dict) -> str:
     var, file = camel(title), f"{kebab(title)}.json"
     lines = [f"// {HEADER}", 'import { readFileSync } from "node:fs";',
-             f'import {{ parseJson, type {title} }} from "betula";', "",
+             f'import {{ parseJson, type {title} }} from "betula-schema";', "",
              f'const {var}: {title} = parseJson("{title}", readFileSync("{file}", "utf8"));']
     if shape(schema) == "union":
         lines.append(f"// {title} is a union type: {' | '.join(variants(schema))}")
@@ -83,7 +83,7 @@ def rust_snippet(title: str, schema: dict) -> str:
     var, file = snake(title), f"{kebab(title)}.json"
     lines = [f"// {HEADER}", "fn main() -> Result<(), Box<dyn std::error::Error>> {",
              f'    let text = std::fs::read_to_string("{file}")?;',
-             f"    let {var}: betula::{title} = betula::parse_str(&text)?;"]
+             f"    let {var}: betula_schema::{title} = betula_schema::parse_str(&text)?;"]
     if shape(schema) == "union":
         lines.append(f"    // {title} is an enum with one variant per alternative, e.g. {title}::{variants(schema)[0]}(_)")
     elif shape(schema) == "wrapper":
@@ -91,8 +91,8 @@ def rust_snippet(title: str, schema: dict) -> str:
     return "\n".join(lines + [f'    println!("{{{var}:?}}");', "    Ok(())", "}", ""])
 
 
-def rust_runner(entries: list[tuple[str, str, str]]) -> str:
-    """entries: (module, snippet path from tests/, (file, fixture path from repo examples/))."""
+def rust_runner(entries: list[tuple[str, str, str, str]]) -> str:
+    """entries: (module, snippet path from tests/, filename the snippet reads, fixture path under examples/)."""
     lines = [f"// {HEADER}", "//! Runs every examples/schemas/*.rs snippet against its schema's first valid fixture.", ""]
     for module, include, _, _ in entries:
         lines += [

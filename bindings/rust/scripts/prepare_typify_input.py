@@ -10,7 +10,7 @@ what's considered valid. Each rewrite is chosen to be equivalent:
   breaks untagged-union variant selection (e.g. an rna-sequence whose
   letters are also valid DNA would deserialize as DnaSequence). The
   single-value enum form is enforced.
-- {"type": "string", "enum": ["+", "-", "."]}  ->  x-rust-type betula::Strand
+- {"type": "string", "enum": ["+", "-", "."]}  ->  x-rust-type betula_schema::Strand
   typify can't derive distinct Rust variant names from punctuation, so this
   maps to the hand-written enum in src/lib.rs. The exact source shape is
   asserted below so a schema change can't silently desync from it.
@@ -22,7 +22,7 @@ import sys
 from pathlib import Path
 
 STRAND = {"type": "string", "enum": ["+", "-", "."]}
-STRAND_RUST_TYPE = {"crate": "betula", "version": "*", "path": "betula::Strand"}
+STRAND_RUST_TYPE = {"crate": "betula-schema", "version": "*", "path": "betula_schema::Strand"}
 
 
 def rewrite(node):
