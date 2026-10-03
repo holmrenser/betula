@@ -82,7 +82,7 @@ fn discriminator_selects_variant() {
     assert!(matches!(untyped, betula::Sequence::UntypedSequence(_)), "got {untyped:?}");
 }
 
-/// The docs site's Bindings page embeds examples/usage.rs as the API tour,
+/// The docs' Getting started section embeds examples/usage.rs as the API tour,
 /// so every public, non-hidden item in lib.rs must appear in it.
 #[test]
 fn usage_example_covers_public_api() {

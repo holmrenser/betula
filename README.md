@@ -29,10 +29,10 @@ so those projects can read and write the same JSON regardless of language.
   → `core/identifier`), so both scripts load the whole `schema/` tree into one
   registry/instance before resolving any `$ref`.
 - `docs/` — the [mystmd](https://mystmd.org) site published at the docs
-  link above. `index.md` and `bindings.md` are hand-written;
+  link above. `index.md` (overview and Getting started) is hand-written;
   `scripts/generate_schema_pages.py` writes a page per schema into
-  `docs/schemas/` (generated, not committed), pulling fixtures and schema
-  sources in with `literalinclude`.
+  `docs/schemas/` (generated, not committed), pulling fixtures, schema
+  sources, and per-language usage snippets in with `literalinclude`.
 - `bindings/{python,typescript,rust}/` — generated types plus validating
   parsers for each language (see below).
 
@@ -43,11 +43,14 @@ Generated types plus validating parsers for Python (Pydantic), TypeScript
 exposes one type per schema title and a parse function that rejects exactly
 what the schema rejects, and runs every `examples/` fixture in CI.
 
-Installation, usage, and API notes are on the docs site's
-[Language bindings](https://holmrenser.github.io/betula/bindings.html) page.
-Its code is each binding's `examples/usage.*` file, which CI runs, and
-fails if a public function or type isn't used in it. Python and Rust also
-carry doctests on the parse functions.
+Installation and an API tour are in the docs' [Getting
+started](https://holmrenser.github.io/betula/#getting-started) section, and
+every schema page has a Usage section showing how to parse it in each
+language. All of that code is real files CI runs: each binding's
+`examples/usage.*` (CI also fails if a public function or type isn't used in
+it) and the per-schema `examples/schemas/*` snippets, which
+`scripts/render_snippets.py` generates alongside the bindings. Python and
+Rust also carry doctests on the parse functions.
 
 ### Regenerating
 

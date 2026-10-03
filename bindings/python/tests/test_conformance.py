@@ -5,9 +5,14 @@ invalid ones must raise. Classes are looked up on the `betula` package by
 schema title, so a schema that isn't exported fails here.
 """
 
+import contextlib
 import doctest
+import io
 import json
+import re
 import runpy
+import shutil
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -65,6 +70,30 @@ class Conformance(unittest.TestCase):
 
 
 USAGE = Path(__file__).resolve().parents[1] / "examples" / "usage.py"
+SNIPPETS = Path(__file__).resolve().parents[1] / "examples" / "schemas"
+
+
+class Snippets(unittest.TestCase):
+    def test_every_schema_snippet_runs(self):
+        # Each schema page shows its examples/schemas/<name>.py snippet; run it
+        # against the schema's first valid fixture, under the filename it opens.
+        schema_names = [
+            path.relative_to(SCHEMA_DIR).as_posix().removesuffix(".schema.json")
+            for path in sorted(SCHEMA_DIR.rglob("*.schema.json"))
+        ]
+        snippet_names = sorted(p.relative_to(SNIPPETS).with_suffix("").as_posix() for p in SNIPPETS.rglob("*.py"))
+        self.assertEqual(snippet_names, sorted(schema_names))
+        with tempfile.TemporaryDirectory() as tmp, contextlib.chdir(tmp):
+            for name in schema_names:
+                with self.subTest(snippet=name):
+                    snippet = SNIPPETS / f"{name}.py"
+                    filename = re.search(r'open\("([^"]+)"\)', snippet.read_text()).group(1)
+                    fixture = sorted((EXAMPLES_DIR / name / "valid").glob("*.json"))[0]
+                    shutil.copy(fixture, Path(tmp) / filename)
+                    out = io.StringIO()
+                    with contextlib.redirect_stdout(out):
+                        runpy.run_path(str(snippet), run_name="__main__")
+                    self.assertTrue(out.getvalue().strip())
 
 
 class Documentation(unittest.TestCase):
@@ -72,7 +101,7 @@ class Documentation(unittest.TestCase):
         runpy.run_path(str(USAGE), run_name="__main__")
 
     def test_usage_example_covers_public_api(self):
-        # The docs site's Bindings page embeds usage.py as the API tour, so
+        # The docs' Getting started section embeds usage.py as the API tour, so
         # every exported name that isn't a generated model must appear in it.
         hand_written = [name for name in betula.__all__ if not hasattr(betula.models, name)]
         self.assertTrue(hand_written)

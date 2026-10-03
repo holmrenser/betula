@@ -34,4 +34,6 @@ CRATE_VERSION="$(sed -n 's/^version = "\(.*\)"/\1/p' bindings/rust/Cargo.toml | 
 (cd bindings/rust && cargo typify --no-builder --crate "betula@$CRATE_VERSION" -d PartialEq \
   ../../build/betula.typify.schema.json -o src/types.rs)
 
+python3 scripts/render_snippets.py
+
 echo "Bindings regenerated."

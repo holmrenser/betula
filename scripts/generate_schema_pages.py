@@ -123,11 +123,34 @@ def include(path: Path, page: Path) -> list[str]:
     return [f"```{{literalinclude}} {rel}", ":language: json", "```"]
 
 
+BINDINGS = [("python", "Python", "py"), ("typescript", "TypeScript", "ts"), ("rust", "Rust", "rs")]
+
+
+def usage(name: str, title: str, page: Path) -> list[str]:
+    """Tabs with each binding's examples/schemas/<name> snippet (see scripts/render_snippets.py)."""
+    lines = [
+        "## Usage",
+        "",
+        f"Read a JSON document and parse it as a `{title}`. CI runs this exact code against the first valid "
+        "example below; see [Getting started](#getting-started) to install the bindings.",
+        "",
+        "::::{tab-set}",
+    ]
+    for lang, label, ext in BINDINGS:
+        snippet = ROOT / "bindings" / lang / "examples" / "schemas" / f"{name}.{ext}"
+        rel = os.path.relpath(snippet, page.parent).replace(os.sep, "/")
+        # start-line skips the "generated, do not edit" header comment
+        lines += [f":::{{tab-item}} {label}", f":sync: {lang}", f"```{{literalinclude}} {rel}",
+                  f":language: {lang}", ":start-line: 1", "```", ":::"]
+    return lines + ["::::"]
+
+
 def schema_page(name: str, schema: dict, linker: Linker) -> tuple[Path, str]:
     page = PAGES_DIR / f"{name}.md"
     lines = [f"({schema_label(name)})=", f"# {schema['title']}", "", f"`{schema['$id']}`", ""]
     lines += [md(schema.get("description", "")), ""]
     lines += type_body(schema, name, linker)
+    lines += [""] + usage(name, schema["title"], page)
 
     defs = schema.get("$defs", {})
     if defs:
